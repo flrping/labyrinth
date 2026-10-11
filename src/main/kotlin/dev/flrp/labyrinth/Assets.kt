@@ -4,12 +4,16 @@ object Assets {
     
     val TEXTURES = arrayOf(
         "background.png",
+        "ui.png",
+        "items.png",
+        "bunbun.png",
         "background_end.png",
         "background_end_1.png",
         "background_end_2.png",
         "background_SL.png",
         "background_SR.png",
         "background.png",
+        "background_all.png",
         "hands_1.png",
         "hands_2.png",
         "pole_1.png",
@@ -17,6 +21,15 @@ object Assets {
         "eyes.png",
         "hearing.png",
         "sound.png",
+        "normal.png",
+        "unhappy1.png",
+        "unhappy2.png",
+        "scared1.png",
+        "scared2.png",
+        "agony.png",
+        "acceptance.png",
+        "look.png",
+        "mainmenu.png"
     )
 
     fun loadAllTextures(labyrinth: Labyrinth) {
@@ -33,6 +46,8 @@ object Assets {
         "kick.wav",
         "snare1.wav",
         "snare2.wav",
+        "beep.wav",
+        "breathe.wav",
         "474014__petebarry__fx_vent_foley.wav",
         "812600__modusmogulus__rooftop-vent-fan-seamless-loop.wav",
         "815606__squarfington__quiet-metal-creaking.wav",

@@ -18,7 +18,9 @@ class MainTheme(
             "keys.wav",
             "kick.wav",
             "snare1.wav",
-            "snare2.wav"
+            "snare2.wav",
+            "beep.wav",
+            "breathe.wav",
         )
 
         for (track in names) {
