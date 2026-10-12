@@ -43,9 +43,11 @@ class Room {
             }
         }
     var pole: Int = 0
+    var web: Int = 0
 
     init {
         pole = floor(Math.random() * 3).toInt()
+        web = floor(Math.random() * 3).toInt()
     }
 
 }

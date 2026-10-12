@@ -14,6 +14,7 @@ object Assets {
         "background_SR.png",
         "background.png",
         "background_all.png",
+        "background_none.png",
         "hands_1.png",
         "hands_2.png",
         "pole_1.png",
@@ -29,7 +30,16 @@ object Assets {
         "agony.png",
         "acceptance.png",
         "look.png",
-        "mainmenu.png"
+        "mainmenu.png",
+        "mask.png",
+        "map.png",
+        "web_1.png",
+        "web_2.png",
+        "clue.png",
+        "bad_ending_2.png",
+        "gameoverbg.png",
+        "nineslicebutton.png",
+        "nineslicebutton_active.png"
     )
 
     fun loadAllTextures(labyrinth: Labyrinth) {
@@ -37,6 +47,20 @@ object Assets {
             val stream = javaClass.classLoader.getResourceAsStream("assets/images/${texture}")
             requireNotNull(stream) { "Missing resource for: $texture" }
             labyrinth.assetManager.registerTexture(texture, stream)
+        }
+    }
+
+    val TEXTURES_GIFS = arrayOf(
+        "good_ending.gif",
+        "bad_ending_1.gif",
+        "bad_ending_3.gif",
+    )
+
+    fun loadAllGIFs(labyrinth: Labyrinth) {
+        for(texture in TEXTURES_GIFS) {
+            val stream = javaClass.classLoader.getResourceAsStream("assets/images/${texture}")
+            requireNotNull(stream) { "Missing resource for: $texture" }
+            labyrinth.assetManager.registerTexturesFromGIF(texture, stream)
         }
     }
 
@@ -51,7 +75,15 @@ object Assets {
         "474014__petebarry__fx_vent_foley.wav",
         "812600__modusmogulus__rooftop-vent-fan-seamless-loop.wav",
         "815606__squarfington__quiet-metal-creaking.wav",
-        "movement.wav"
+        "movement.wav",
+        "recall.wav",
+        "whistle.wav",
+        "the_eyes_encounter.wav",
+        "the_eyes_jumpscare.wav",
+        "the_hearing_jumpscare.wav",
+        "the_sound_encounter.wav",
+        "the_sound_jumpscare.wav",
+        "hearingtune.wav"
     )
 
     fun loadAllSounds(labyrinth: Labyrinth) {

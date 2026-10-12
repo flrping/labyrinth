@@ -3,19 +3,19 @@ package dev.flrp.labyrinth.screens
 import com.wyrmlings.rune.input.MouseButton
 import com.wyrmlings.rune.math.Vector2
 import com.wyrmlings.rune.node.Node
-import com.wyrmlings.rune.node.xy.ui.Button
 import com.wyrmlings.rune.node.xy.ui.Label
 import com.wyrmlings.rune.node.xy.ui.TextureRect
 import com.wyrmlings.rune.property.Color
-import com.wyrmlings.rune.ui.style.container.FlatContainer
 import com.wyrmlings.rune.ui.style.text.FontSettings
 import com.wyrmlings.rune.ui.style.text.TextAlign
 import com.wyrmlings.rune.ui.style.text.TextDecoration
 import com.wyrmlings.rune.ui.style.text.TextPosition
 import com.wyrmlings.rune.ui.texture.ImageTexture
 import dev.flrp.labyrinth.Labyrinth
+import dev.flrp.labyrinth.audio.AudioMaster
+import dev.flrp.labyrinth.ui.NineSliceButton
 
-class TitleScreen(val labyrinth: Labyrinth) : Node() {
+class TitleScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node() {
 
     override fun onReady() {
 
@@ -40,9 +40,12 @@ class TitleScreen(val labyrinth: Labyrinth) : Node() {
         }
         addChild(title)
 
-        val startButton = object : Button() {
+        val nineSliceTexture = ImageTexture(labyrinth.assetManager.loadTexture("nineslicebutton.png"))
+        val nineSliceTextureActive = ImageTexture(labyrinth.assetManager.loadTexture("nineslicebutton_active.png"))
+
+        val startButton = object : NineSliceButton(nineSliceTexture, nineSliceTextureActive) {
             override fun onMouseClick(position: Vector2, action: MouseButton) {
-                labyrinth.changeScreen(MainScreen(labyrinth))
+                labyrinth.changeScreen(GameScreen(labyrinth, audioMaster))
             }
         }.apply {
             text = "Start"
@@ -55,14 +58,11 @@ class TitleScreen(val labyrinth: Labyrinth) : Node() {
                     textAlign = TextAlign.CENTER
                 }
             }
-            container = FlatContainer().apply {
-                fillColor = Color.GRAY
-            }
             size = Vector2(150f, 50f)
         }
         addChild(startButton)
 
-        val settingsButton = Button().apply {
+        val settingsButton = NineSliceButton(nineSliceTexture, nineSliceTextureActive).apply {
             text = "Settings"
             position = Vector2(125f, 275f)
             fontSettings = FontSettings().apply {
@@ -73,14 +73,11 @@ class TitleScreen(val labyrinth: Labyrinth) : Node() {
                     textAlign = TextAlign.CENTER
                 }
             }
-            container = FlatContainer().apply {
-                fillColor = Color.GRAY
-            }
             size = Vector2(150f, 50f)
         }
         addChild(settingsButton)
 
-        val creditsButton = Button().apply {
+        val creditsButton = NineSliceButton(nineSliceTexture, nineSliceTextureActive).apply {
             text = "Credits"
             position = Vector2(125f, 350f)
             fontSettings = FontSettings().apply {
@@ -90,9 +87,6 @@ class TitleScreen(val labyrinth: Labyrinth) : Node() {
                     textPosition = TextPosition.CENTER
                     textAlign = TextAlign.CENTER
                 }
-            }
-            container = FlatContainer().apply {
-                fillColor = Color.GRAY
             }
             size = Vector2(150f, 50f)
         }

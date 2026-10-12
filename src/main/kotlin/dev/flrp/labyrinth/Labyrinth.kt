@@ -2,7 +2,8 @@ package dev.flrp.labyrinth
 
 import com.wyrmlings.rune.Game
 import com.wyrmlings.rune.event.EventBus
-import dev.flrp.labyrinth.screens.MainScreen
+import com.wyrmlings.rune.node.Sound
+import dev.flrp.labyrinth.audio.AudioMaster
 import dev.flrp.labyrinth.screens.TitleScreen
 
 class Labyrinth : Game() {
@@ -21,9 +22,13 @@ class Labyrinth : Game() {
         assetManager.registerFont("JockeyOne", font)
 
         Assets.loadAllTextures(this)
+        Assets.loadAllGIFs(this)
         Assets.loadAllSounds(this)
 
-        setInitialScreen(TitleScreen(this))
+        val audioMaster = AudioMaster()
+        globals.addChild(audioMaster)
+
+        setInitialScreen(TitleScreen(this, audioMaster))
     }
 
 }
