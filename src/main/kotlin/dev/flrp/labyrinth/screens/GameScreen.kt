@@ -9,6 +9,7 @@ import com.wyrmlings.rune.node.Timer
 import com.wyrmlings.rune.node.xy.ui.Label
 import com.wyrmlings.rune.node.xy.ui.TextureRect
 import com.wyrmlings.rune.property.Color
+import com.wyrmlings.rune.resource.Audio
 import com.wyrmlings.rune.ui.style.text.FontSettings
 import com.wyrmlings.rune.ui.style.text.TextAlign
 import com.wyrmlings.rune.ui.style.text.TextDecoration
@@ -16,13 +17,15 @@ import com.wyrmlings.rune.ui.style.text.TextPosition
 import com.wyrmlings.rune.ui.texture.ImageTexture
 import dev.flrp.labyrinth.Labyrinth
 import dev.flrp.labyrinth.audio.AudioMaster
-import dev.flrp.labyrinth.audio.MainTheme
+import dev.flrp.labyrinth.audio.GameTheme
 import dev.flrp.labyrinth.event.ChangeRoomEvent
 import dev.flrp.labyrinth.mechanics.Hands
 import dev.flrp.labyrinth.mechanics.enemy.Enemy
 import dev.flrp.labyrinth.mechanics.enemy.EyesEnemy
 import dev.flrp.labyrinth.mechanics.enemy.HearingEnemy
+import dev.flrp.labyrinth.mechanics.enemy.SneakerEnemy
 import dev.flrp.labyrinth.mechanics.enemy.SoundEnemy
+import dev.flrp.labyrinth.mechanics.enemy.StomperEnemy
 import dev.flrp.labyrinth.mechanics.structure.Room
 import kotlin.math.floor
 import kotlin.random.Random
@@ -88,6 +91,7 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
     lateinit var mask: TextureRect
     lateinit var map: TextureRect
     lateinit var clue: TextureRect
+    lateinit var earplugs: TextureRect
 
     // Sound
     lateinit var movement: Sound
@@ -115,6 +119,25 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
     lateinit var timer: Timer
     lateinit var ambience: Sound
     lateinit var whistle: Sound
+    lateinit var earPlugSound: Sound
+    lateinit var gasMaskSound: Sound
+    lateinit var resolveSound: Sound
+    lateinit var paperCrumpleSound: Sound
+    val resolveSoundList = listOf(
+        "cry1.wav",
+        "cry2.wav",
+        "cry3.wav",
+        "cry4.wav",
+        "cry5.wav",
+        "giggle1.wav",
+        "giggle2.wav",
+        "giggle3.wav",
+        "giggle4.wav",
+        "giggle5.wav",
+        "giggle6.wav",
+        "giggle7.wav"
+    )
+    var resolveAudios = mutableListOf<Audio>()
 
     // Screen text
     lateinit var roomName: Label
@@ -128,9 +151,11 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
     lateinit var eyesEnemy: EyesEnemy
     lateinit var soundEnemy: SoundEnemy
     lateinit var hearingEnemy: HearingEnemy
+    lateinit var stomperEnemy: StomperEnemy
+    lateinit var sneakerEnemy: SneakerEnemy
 
     // Game trackers
-    var musicVolume = 1f
+    var musicVolume = labyrinth.musicVolume.toFloat()
     var previousFearLevel = 0
     var fearLevel: Int = 0
     var isInDanger: Boolean = false
@@ -140,12 +165,28 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
     var isBlowingWhistle: Boolean = false
     var isMapOpen: Boolean = false
 
+    // TTL
     var resolveTimer: Double = 0.0
+
+    // The eyes
     var eyesMaskTime: Double = 0.0
+
+    // The sound
     var whistleNeeded: Int = 0
     var whistleCount: Int = 0
-    var earPlugTime: Double = 0.0
     var whistleTimer: Double = 0.0
+
+    // The hearing
+    var earPlugTime: Double = 0.0
+
+    // The stomper
+    var isHuntedByStomper: Boolean = false
+    var movesNeeded: Int = 0
+    var moveCount: Int = 0
+
+    // The sneaker
+    var sneakerTimeNeeded: Double = 0.0
+    var sneakerTimeWaited: Double = 0.0
 
     var clueRoom: Room? = null
     var collected: Int = 0
@@ -224,7 +265,7 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
 
         movement = Sound().apply {
             name = "Movement"
-            volume = 1.0f
+            volume = labyrinth.sfxVolume.toFloat()
             audio = labyrinth.audioManager.loadAudio("movement.wav")
         }
         labyrinth.globals.addChild(movement)
@@ -238,15 +279,23 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
 
         eyesEnemy = EyesEnemy(labyrinth).apply { room = room11; visible = false }
         addChild(eyesEnemy)
-
         enemies += eyesEnemy
+
         soundEnemy = SoundEnemy(labyrinth).apply { room = room30; visible = false }
         addChild(soundEnemy)
-
         enemies += soundEnemy
+
         hearingEnemy = HearingEnemy(labyrinth).apply { room = room35; visible = false }
-        enemies += hearingEnemy
         addChild(hearingEnemy)
+        enemies += hearingEnemy
+
+        stomperEnemy = StomperEnemy(labyrinth).apply { room = room7; visible = false }
+        addChild(stomperEnemy)
+        enemies += stomperEnemy
+
+        sneakerEnemy = SneakerEnemy(labyrinth).apply { room = room4; visible = false }
+        addChild(sneakerEnemy)
+        enemies += sneakerEnemy
 
         pole1 = TextureRect().apply {
             texture = ImageTexture(labyrinth.assetManager.loadTexture("pole_1.png"))
@@ -285,6 +334,13 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
             visible = false
         }
         addChild(mask)
+
+        earplugs = TextureRect().apply {
+            texture = ImageTexture(labyrinth.assetManager.loadTexture("earplugs.png"))
+            size = Vector2(labyrinth.width.toFloat(), labyrinth.height.toFloat())
+            visible = false
+        }
+        addChild(earplugs)
 
         map = TextureRect().apply {
             texture = ImageTexture(labyrinth.assetManager.loadTexture("map.png"))
@@ -356,7 +412,7 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
         }
         addChild(cluesCollected)
 
-        clueRoom = rooms.filter { it !in listOf(room1, room2, room3, room4, room20, room21) }.random()
+        clueRoom = rooms.filter { it !in listOf(room1, room2, room3, room4, room20, room21, room33, room25) }.random()
 
         currentObjective = Label().apply {
             text = "Objective: Find the clue at ${clueRoom?.name.toString()}."
@@ -387,21 +443,50 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
         }
         addChild(pressKey)
 
+        for(resolveSound in resolveSoundList) {
+            resolveAudios += labyrinth.audioManager.loadAudio(resolveSound)
+        }
 
-        val theme = MainTheme(labyrinth)
+        resolveSound = Sound().apply {
+            volume = labyrinth.enemyVolume.toFloat()
+        }
+        addChild(resolveSound)
+
+        val theme = GameTheme(labyrinth)
         audioMaster.theme = theme
         audioMaster.volume(0f)
         audioMaster.play()
-        audioMaster.volume("bass.wav", 1.0f)
+        audioMaster.volume("bass.wav", musicVolume)
 
         whistle = Sound().apply {
-            volume = 1f
+            volume = labyrinth.sfxVolume.toFloat()
             audio = labyrinth.audioManager.loadAudio("whistle.wav")
         }
         addChild(whistle)
 
+        gasMaskSound = Sound().apply {
+            volume = labyrinth.sfxVolume.toFloat()
+            audio = labyrinth.audioManager.loadAudio("gasmaskbreathing.wav")
+            loop = true
+        }
+        addChild(gasMaskSound)
+
+        earPlugSound = Sound().apply {
+            volume = labyrinth.sfxVolume.toFloat()
+            audio = labyrinth.audioManager.loadAudio("202085__deleted_user_3717932__whitenoise_1rlpf.wav")
+            loop = true
+        }
+        addChild(earPlugSound)
+
+        paperCrumpleSound = Sound().apply {
+            volume = labyrinth.sfxVolume.toFloat()
+            audio = labyrinth.audioManager.loadAudio("334200__wasabiwielder__paper-crumple-3.wav")
+            loop = false
+        }
+        addChild(paperCrumpleSound)
+
         ambience = Sound().apply {
-            volume = 0.05f
+            volume = 0.05f * labyrinth.sfxVolume.toFloat()
             audio = labyrinth.audioManager.loadAudio("812600__modusmogulus__rooftop-vent-fan-seamless-loop.wav")
             loop = true
         }
@@ -424,6 +509,11 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
         if(Input.wasKeyPressed(Key.NUM_1) && !isEarPlugOn && !isMapOpen) { // Put on mask
             isMaskOn = !isMaskOn
             mask.visible = isMaskOn
+            if(isMaskOn) {
+                gasMaskSound.play()
+            } else {
+                gasMaskSound.stop()
+            }
         }
 
         if(Input.wasKeyPressed(Key.NUM_2) && !isMaskOn && !isEarPlugOn && !isBlowingWhistle && !isMapOpen) { // Blow whistle
@@ -435,9 +525,13 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
         if(Input.wasKeyPressed(Key.NUM_3) && !isMaskOn && !isMapOpen) { // Earplug
             isEarPlugOn = !isEarPlugOn
             if(isEarPlugOn) {
-                musicVolume = 0.4f
+                earPlugSound.play()
+                earplugs.visible = true
+                musicVolume = 0.4f * labyrinth.musicVolume.toFloat()
             } else {
-                musicVolume = 1f
+                earPlugSound.stop()
+                earplugs.visible = false
+                musicVolume = labyrinth.musicVolume.toFloat()
             }
             updateMusicVolumes()
         }
@@ -451,6 +545,7 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
             if(clueRoom === currRoom) {
                 clue.visible = false
                 collected++
+                paperCrumpleSound.play()
                 if(collected >= cluesRequired) {
                     clueRoom = null
                     cluesCollected.text = "All Clues Collected."
@@ -533,8 +628,33 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
 
         for(enemy in enemies) {
             if(enemy.room === currRoom) {
-                onEnemyArrive(enemy)
-                break
+                if(enemy.type != EnemyType.STOMPER && isHuntedByStomper) {
+                    moveEnemyRandom(enemy)
+                    println("Stomper chase relocated $enemy to ${enemy.room?.name}")
+                    break
+                } else {
+                    onEnemyArrive(enemy)
+                    break
+                }
+            }
+        }
+
+        if(currentEnemy?.type == EnemyType.STOMPER && isHuntedByStomper) {
+            if(moveCount >= movesNeeded) {
+                isInDanger = false
+                currentEnemy!!.visible = false
+                (currentEnemy as StomperEnemy).encounterSound.stop()
+                resolveSound.audio = resolveAudios.random()
+                resolveSound.play()
+                moveEnemyRandom(currentEnemy!!)
+                currentEnemy = null
+                movesNeeded = 0
+                moveCount = 0
+                resolveTimer = 0.0
+                isHuntedByStomper = false
+            } else {
+                currentEnemy!!.encounterSound.play()
+                moveCount++
             }
         }
 
@@ -558,6 +678,15 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
         if(fearLevel > 8) {
             handleGameOver(enemy, true)
             return
+        }
+
+        if(enemy is SneakerEnemy) {
+            sneakerTimeNeeded = (Math.random() * 5.0) + 1.0
+        }
+
+        if(enemy is StomperEnemy) {
+            isHuntedByStomper = true
+            movesNeeded = (floor(Math.random() * 4) + 1).toInt()
         }
 
         if(enemy is HearingEnemy) {
@@ -587,6 +716,8 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
                 isInDanger = false
                 currentEnemy!!.visible = false
                 (currentEnemy as SoundEnemy).encounterSound.stop()
+                resolveSound.audio = resolveAudios.random()
+                resolveSound.play()
                 moveEnemyRandom(currentEnemy!!)
                 currentEnemy = null
                 whistleCount = 0
@@ -608,6 +739,8 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
                     isInDanger = false
                     currentEnemy!!.visible = false
                     (currentEnemy as EyesEnemy).encounterSound.stop()
+                    resolveSound.audio = resolveAudios.random()
+                    resolveSound.play()
                     moveEnemyRandom(currentEnemy!!)
                     currentEnemy = null
                     eyesMaskTime = 0.0
@@ -623,10 +756,29 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
                     isInDanger = false
                     currentEnemy!!.visible = false
                     (currentEnemy as HearingEnemy).encounterSound.stop()
+                    resolveSound.audio = resolveAudios.random()
+                    resolveSound.play()
                     moveEnemyRandom(currentEnemy!!)
                     currentEnemy = null
                     earPlugTime = 0.0
                     resolveTimer = 0.0
+                }
+            }
+
+            is SneakerEnemy -> {
+                if(sneakerTimeWaited >= sneakerTimeNeeded) {
+                    isInDanger = false
+                    currentEnemy!!.visible = false
+                    (currentEnemy as SneakerEnemy).goSound.play()
+                    resolveSound.audio = labyrinth.audioManager.loadAudio("giggle7.wav")
+                    resolveSound.play()
+                    moveEnemyRandom(currentEnemy!!)
+                    currentEnemy = null
+                    sneakerTimeWaited = 0.0
+                    sneakerTimeNeeded = 0.0
+                    resolveTimer = 0.0
+                } else {
+                    sneakerTimeWaited += delta
                 }
             }
         }
@@ -646,7 +798,7 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
         }
 
         // Moving when in danger should GO you.
-        if(isInDanger && currentEnemy != null) {
+        if(isInDanger && currentEnemy != null && currentEnemy!!.type != EnemyType.STOMPER) {
             handleGameOver(currentEnemy!!, false)
         }
 

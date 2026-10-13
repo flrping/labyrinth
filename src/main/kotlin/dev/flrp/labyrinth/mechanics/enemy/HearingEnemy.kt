@@ -18,11 +18,13 @@ class HearingEnemy(val labyrinth: Labyrinth) : Enemy() {
 
         encounterSound = Sound().apply {
             audio = labyrinth.audioManager.loadAudio("hearingtune.wav")
+            volume = labyrinth.enemyVolume.toFloat()
         }
         addChild(encounterSound)
 
         jumpscareSound = Sound().apply {
             audio = labyrinth.audioManager.loadAudio("the_hearing_jumpscare.wav")
+            volume = labyrinth.enemyVolume.toFloat()
         }
         addChild(jumpscareSound)
     }

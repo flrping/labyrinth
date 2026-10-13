@@ -1,0 +1,30 @@
+package dev.flrp.labyrinth.mechanics.enemy
+
+import com.wyrmlings.rune.math.Vector2
+import com.wyrmlings.rune.node.Sound
+import dev.flrp.labyrinth.Labyrinth
+import dev.flrp.labyrinth.screens.EnemyType
+
+class StomperEnemy(val labyrinth: Labyrinth) : Enemy() {
+
+    override val type: EnemyType = EnemyType.STOMPER
+    override lateinit var encounterSound: Sound
+    override lateinit var jumpscareSound: Sound
+
+    override fun onReady() {
+        size = Vector2(labyrinth.width.toFloat(), labyrinth.height.toFloat())
+
+        encounterSound = Sound().apply {
+            audio = labyrinth.audioManager.loadAudio("the_stomper_encounter.wav")
+            volume = labyrinth.enemyVolume.toFloat()
+        }
+        addChild(encounterSound)
+
+        jumpscareSound = Sound().apply {
+            audio = labyrinth.audioManager.loadAudio("giggle7.wav")
+            volume = labyrinth.enemyVolume.toFloat()
+        }
+        addChild(jumpscareSound)
+    }
+
+}

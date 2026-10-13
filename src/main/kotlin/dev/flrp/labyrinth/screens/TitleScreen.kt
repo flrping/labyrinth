@@ -13,6 +13,7 @@ import com.wyrmlings.rune.ui.style.text.TextPosition
 import com.wyrmlings.rune.ui.texture.ImageTexture
 import dev.flrp.labyrinth.Labyrinth
 import dev.flrp.labyrinth.audio.AudioMaster
+import dev.flrp.labyrinth.audio.TitleTheme
 import dev.flrp.labyrinth.ui.NineSliceButton
 
 class TitleScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node() {
@@ -62,7 +63,11 @@ class TitleScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node
         }
         addChild(startButton)
 
-        val settingsButton = NineSliceButton(nineSliceTexture, nineSliceTextureActive).apply {
+        val settingsButton = object : NineSliceButton(nineSliceTexture, nineSliceTextureActive) {
+            override fun onMouseClick(position: Vector2, action: MouseButton) {
+                labyrinth.changeScreen(SettingsScreen(labyrinth, audioMaster))
+            }
+        }.apply {
             text = "Settings"
             position = Vector2(125f, 275f)
             fontSettings = FontSettings().apply {
@@ -77,7 +82,11 @@ class TitleScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node
         }
         addChild(settingsButton)
 
-        val creditsButton = NineSliceButton(nineSliceTexture, nineSliceTextureActive).apply {
+        val creditsButton = object : NineSliceButton(nineSliceTexture, nineSliceTextureActive) {
+            override fun onMouseClick(position: Vector2, action: MouseButton) {
+                labyrinth.changeScreen(CreditsScreen(labyrinth, audioMaster))
+            }
+        }.apply {
             text = "Credits"
             position = Vector2(125f, 350f)
             fontSettings = FontSettings().apply {
@@ -92,6 +101,11 @@ class TitleScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node
         }
         addChild(creditsButton)
 
+        val theme = TitleTheme(labyrinth)
+        if(audioMaster.theme?.name != theme.name) {
+            audioMaster.theme = theme
+            audioMaster.play()
+        }
     }
 
 }

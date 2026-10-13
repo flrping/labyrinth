@@ -4,9 +4,9 @@ import dev.flrp.labyrinth.Labyrinth
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
-class MainTheme(
+class GameTheme(
     val labyrinth: Labyrinth,
-    override val name: String = "Main Theme",
+    override val name: String = "Game Theme",
     override val length: Float = 6.85f,
     override val tempo: Float = 140.00f,
     override val tracks: ConcurrentMap<String, Track> = ConcurrentHashMap()

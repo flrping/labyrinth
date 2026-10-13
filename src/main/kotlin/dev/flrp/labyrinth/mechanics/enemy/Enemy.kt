@@ -2,6 +2,7 @@ package dev.flrp.labyrinth.mechanics.enemy
 
 import com.wyrmlings.rune.node.Sound
 import com.wyrmlings.rune.node.xy.ui.TextureRect
+import com.wyrmlings.rune.resource.Audio
 import dev.flrp.labyrinth.mechanics.structure.Room
 import dev.flrp.labyrinth.screens.EnemyType
 import kotlin.math.floor

@@ -39,7 +39,8 @@ object Assets {
         "bad_ending_2.png",
         "gameoverbg.png",
         "nineslicebutton.png",
-        "nineslicebutton_active.png"
+        "nineslicebutton_active.png",
+        "earplugs.png"
     )
 
     fun loadAllTextures(labyrinth: Labyrinth) {
@@ -83,7 +84,27 @@ object Assets {
         "the_hearing_jumpscare.wav",
         "the_sound_encounter.wav",
         "the_sound_jumpscare.wav",
-        "hearingtune.wav"
+        "hearingtune.wav",
+        "labyrinth_main_theme.wav",
+        "labyrinth_victory.wav",
+        "cry1.wav",
+        "cry2.wav",
+        "cry3.wav",
+        "cry4.wav",
+        "cry5.wav",
+        "giggle1.wav",
+        "giggle2.wav",
+        "giggle3.wav",
+        "giggle4.wav",
+        "giggle5.wav",
+        "giggle6.wav",
+        "giggle7.wav",
+        "gasmaskbreathing.wav",
+        "202085__deleted_user_3717932__whitenoise_1rlpf.wav",
+        "334200__wasabiwielder__paper-crumple-3.wav",
+        "the_stomper_encounter.wav",
+        "the_sneaker_encounter.wav",
+        "go.wav"
     )
 
     fun loadAllSounds(labyrinth: Labyrinth) {

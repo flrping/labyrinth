@@ -25,16 +25,19 @@ class SoundEnemy(val labyrinth: Labyrinth) : Enemy() {
 
         sound = Sound().apply {
             audio = labyrinth.audioManager.loadAudio("recall.wav")
+            volume = labyrinth.enemyVolume.toFloat()
         }
         addChild(sound)
 
         encounterSound = Sound().apply {
             audio = labyrinth.audioManager.loadAudio("the_sound_encounter.wav")
+            volume = labyrinth.enemyVolume.toFloat()
         }
         addChild(encounterSound)
 
         jumpscareSound = Sound().apply {
             audio = labyrinth.audioManager.loadAudio("the_sound_jumpscare.wav")
+            volume = labyrinth.enemyVolume.toFloat()
         }
         addChild(jumpscareSound)
     }

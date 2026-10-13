@@ -7,7 +7,9 @@ import dev.flrp.labyrinth.audio.AudioMaster
 import dev.flrp.labyrinth.mechanics.enemy.Enemy
 import dev.flrp.labyrinth.mechanics.enemy.EyesEnemy
 import dev.flrp.labyrinth.mechanics.enemy.HearingEnemy
+import dev.flrp.labyrinth.mechanics.enemy.SneakerEnemy
 import dev.flrp.labyrinth.mechanics.enemy.SoundEnemy
+import dev.flrp.labyrinth.mechanics.enemy.StomperEnemy
 
 class JumpscareScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val enemyType: EnemyType, val didTransform: Boolean) : Node() {
 
@@ -26,6 +28,13 @@ class JumpscareScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, va
 
             EnemyType.HEARING -> {
                 HearingEnemy(labyrinth)
+            }
+
+            EnemyType.STOMPER -> {
+                StomperEnemy(labyrinth)
+            }
+            EnemyType.SNEAKER -> {
+                SneakerEnemy(labyrinth)
             }
         }
         enemy.scale = 1.2f

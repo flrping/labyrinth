@@ -14,6 +14,7 @@ import com.wyrmlings.rune.ui.style.text.TextPosition
 import com.wyrmlings.rune.ui.texture.ImageTexture
 import dev.flrp.labyrinth.Labyrinth
 import dev.flrp.labyrinth.audio.AudioMaster
+import dev.flrp.labyrinth.audio.EndingTheme
 import dev.flrp.labyrinth.ui.NineSliceButton
 
 class GameOverScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val gameOverType: GameOverType) : Node() {
@@ -126,7 +127,6 @@ class GameOverScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val
             override fun onMouseClick(position: Vector2, action: MouseButton) {
                 labyrinth.changeScreen(TitleScreen(labyrinth, audioMaster))
             }
-
         }.apply {
             position = Vector2(520f, 550f)
             size = Vector2(150f, 50f)
@@ -160,6 +160,11 @@ class GameOverScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val
             }
         }
         addChild(runAgainButton)
+
+        val theme = EndingTheme(labyrinth)
+        audioMaster.theme = theme
+        audioMaster.volume(labyrinth.musicVolume.toFloat())
+        audioMaster.play()
 
     }
 

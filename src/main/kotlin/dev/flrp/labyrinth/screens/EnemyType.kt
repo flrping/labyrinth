@@ -4,6 +4,8 @@ enum class EnemyType {
 
     EYES,
     SOUND,
-    HEARING
+    HEARING,
+    STOMPER,
+    SNEAKER
 
 }
