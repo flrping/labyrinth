@@ -10,7 +10,7 @@ class SneakerEnemy(val labyrinth: Labyrinth) : Enemy() {
     override val type: EnemyType = EnemyType.SNEAKER
     override lateinit var encounterSound: Sound
     override lateinit var jumpscareSound: Sound
-    lateinit var goSound: Sound
+    lateinit var resolutionSound: Sound
 
     override fun onReady() {
         size = Vector2(labyrinth.width.toFloat(), labyrinth.height.toFloat())
@@ -21,17 +21,17 @@ class SneakerEnemy(val labyrinth: Labyrinth) : Enemy() {
         }
         addChild(encounterSound)
 
-        goSound = Sound().apply {
-            audio = labyrinth.audioManager.loadAudio("go.wav")
-            volume = labyrinth.enemyVolume.toFloat()
-        }
-        addChild(goSound)
-
         jumpscareSound = Sound().apply {
             audio = labyrinth.audioManager.loadAudio("giggle6.wav")
             volume = labyrinth.enemyVolume.toFloat()
         }
         addChild(jumpscareSound)
+
+        resolutionSound = Sound().apply {
+            audio = labyrinth.audioManager.loadAudio("run_away_resolution.wav")
+            volume = labyrinth.enemyVolume.toFloat()
+        }
+        addChild(resolutionSound)
     }
 
 }

@@ -104,7 +104,7 @@ object Assets {
         "334200__wasabiwielder__paper-crumple-3.wav",
         "the_stomper_encounter.wav",
         "the_sneaker_encounter.wav",
-        "go.wav"
+        "run_away_resolution.wav",
     )
 
     fun loadAllSounds(labyrinth: Labyrinth) {

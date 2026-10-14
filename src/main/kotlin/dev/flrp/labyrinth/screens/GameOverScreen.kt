@@ -15,6 +15,7 @@ import com.wyrmlings.rune.ui.texture.ImageTexture
 import dev.flrp.labyrinth.Labyrinth
 import dev.flrp.labyrinth.audio.AudioMaster
 import dev.flrp.labyrinth.audio.EndingTheme
+import dev.flrp.labyrinth.mechanics.structure.FirstLevel
 import dev.flrp.labyrinth.ui.NineSliceButton
 
 class GameOverScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val gameOverType: GameOverType) : Node() {
@@ -144,7 +145,7 @@ class GameOverScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val
 
         runAgainButton  = object : NineSliceButton(nineSliceTexture, nineSliceTextureActive) {
             override fun onMouseClick(position: Vector2, action: MouseButton) {
-                labyrinth.changeScreen(GameScreen(labyrinth, audioMaster))
+                labyrinth.changeScreen(GameScreen(labyrinth, audioMaster, FirstLevel()))
             }
         }.apply {
             position = Vector2(700f, 550f)

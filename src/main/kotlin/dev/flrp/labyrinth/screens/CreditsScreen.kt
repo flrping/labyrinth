@@ -30,9 +30,11 @@ class CreditsScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : No
                 Programmer: Jaelyn (flrp)
                 Composer: Jaelyn (flrp)
                 Artist: Jaelyn (flrp)
-                Vocal Artists: Hannah Chapin
+                Vocal Artists: 
+                    Hannah Chapin - https://linktr.ee/hannahdoesvo
+                    Hollis Lee - https://linktr.ee/hollis.lee.va
                 SFX: PeteBarry, squarfington, modusmogulus, vestibule-door, designerschoice, 
-                HOrvi64, and more from freesound.org
+                HOrvi64, WasabiWielder, Samantha_Dolman, bouncyballblue, and others from freesound.org
             """.trimIndent()
             position = Vector2(0f, 0f)
             fontSettings = FontSettings().apply {

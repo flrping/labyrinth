@@ -10,6 +10,7 @@ class StomperEnemy(val labyrinth: Labyrinth) : Enemy() {
     override val type: EnemyType = EnemyType.STOMPER
     override lateinit var encounterSound: Sound
     override lateinit var jumpscareSound: Sound
+    lateinit var resolutionSound: Sound
 
     override fun onReady() {
         size = Vector2(labyrinth.width.toFloat(), labyrinth.height.toFloat())
@@ -25,6 +26,12 @@ class StomperEnemy(val labyrinth: Labyrinth) : Enemy() {
             volume = labyrinth.enemyVolume.toFloat()
         }
         addChild(jumpscareSound)
+
+        resolutionSound = Sound().apply {
+            audio = labyrinth.audioManager.loadAudio("run_away_resolution.wav")
+            volume = labyrinth.enemyVolume.toFloat()
+        }
+        addChild(resolutionSound)
     }
 
 }

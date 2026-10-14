@@ -14,6 +14,7 @@ import com.wyrmlings.rune.ui.texture.ImageTexture
 import dev.flrp.labyrinth.Labyrinth
 import dev.flrp.labyrinth.audio.AudioMaster
 import dev.flrp.labyrinth.audio.TitleTheme
+import dev.flrp.labyrinth.mechanics.structure.FirstLevel
 import dev.flrp.labyrinth.ui.NineSliceButton
 
 class TitleScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node() {
@@ -46,7 +47,7 @@ class TitleScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node
 
         val startButton = object : NineSliceButton(nineSliceTexture, nineSliceTextureActive) {
             override fun onMouseClick(position: Vector2, action: MouseButton) {
-                labyrinth.changeScreen(GameScreen(labyrinth, audioMaster))
+                labyrinth.changeScreen(GameScreen(labyrinth, audioMaster, FirstLevel()))
             }
         }.apply {
             text = "Start"
@@ -100,6 +101,25 @@ class TitleScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node
             size = Vector2(150f, 50f)
         }
         addChild(creditsButton)
+
+        val howToPlayButton = object : NineSliceButton(nineSliceTexture, nineSliceTextureActive) {
+            override fun onMouseClick(position: Vector2, action: MouseButton) {
+                labyrinth.changeScreen(HowToPlayScreen(labyrinth, audioMaster))
+            }
+        }.apply {
+            text = "How to Play"
+            position = Vector2(125f, 425f)
+            fontSettings = FontSettings().apply {
+                font = labyrinth.assetManager.loadFont("JockeyOne", 24)
+                textDecoration = TextDecoration().apply {
+                    strokeColor = Color.WHITE
+                    textPosition = TextPosition.CENTER
+                    textAlign = TextAlign.CENTER
+                }
+            }
+            size = Vector2(150f, 50f)
+        }
+        addChild(howToPlayButton)
 
         val theme = TitleTheme(labyrinth)
         if(audioMaster.theme?.name != theme.name) {

@@ -26,56 +26,18 @@ import dev.flrp.labyrinth.mechanics.enemy.HearingEnemy
 import dev.flrp.labyrinth.mechanics.enemy.SneakerEnemy
 import dev.flrp.labyrinth.mechanics.enemy.SoundEnemy
 import dev.flrp.labyrinth.mechanics.enemy.StomperEnemy
+import dev.flrp.labyrinth.mechanics.structure.Level
 import dev.flrp.labyrinth.mechanics.structure.Room
+import kotlin.collections.random
 import kotlin.math.floor
 import kotlin.random.Random
 
-class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node() {
+class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val level: Level) : Node() {
 
     // Direction
     val directions = listOf("up", "right", "down", "left")
     var direction = "left"
     var currRoom: Room? = null
-
-    // Rooms
-    var rooms = listOf<Room>()
-    var room1: Room = Room().apply { name = "Room 1" }.also { rooms += it }
-    var room2: Room = Room().apply { name = "Room 2" }.also { rooms += it }
-    var room3: Room = Room().apply { name = "Room 3" }.also { rooms += it }
-    var room4: Room = Room().apply { name = "Room 4" }.also { rooms += it }
-    var room5: Room = Room().apply { name = "Room 5" }.also { rooms += it }
-    var room6: Room = Room().apply { name = "Room 6" }.also { rooms += it }
-    var room7: Room = Room().apply { name = "Room 7" }.also { rooms += it }
-    var room8: Room = Room().apply { name = "Room 8" }.also { rooms += it }
-    var room9: Room = Room().apply { name = "Room 9" }.also { rooms += it }
-    var room10: Room = Room().apply { name = "Room 10" }.also { rooms += it }
-    var room11: Room = Room().apply { name = "Room 11" }.also { rooms += it }
-    var room12: Room = Room().apply { name = "Room 12" }.also { rooms += it }
-    var room13: Room = Room().apply { name = "Room 13" }.also { rooms += it }
-    var room14: Room = Room().apply { name = "Room 14" }.also { rooms += it }
-    var room15: Room = Room().apply { name = "Room 15" }.also { rooms += it }
-    var room16: Room = Room().apply { name = "Room 16" }.also { rooms += it }
-    var room17: Room = Room().apply { name = "Room 17" }.also { rooms += it }
-    var room18: Room = Room().apply { name = "Room 18" }.also { rooms += it }
-    var room19: Room = Room().apply { name = "Room 19" }.also { rooms += it }
-    var room20: Room = Room().apply { name = "Room 20" }.also { rooms += it }
-    var room21: Room = Room().apply { name = "Room 21" }.also { rooms += it }
-    var room22: Room = Room().apply { name = "Room 22" }.also { rooms += it }
-    var room23: Room = Room().apply { name = "Room 23" }.also { rooms += it }
-    var room24: Room = Room().apply { name = "Room 24" }.also { rooms += it }
-    var room25: Room = Room().apply { name = "Room 25" }.also { rooms += it }
-    var room26: Room = Room().apply { name = "Room 26" }.also { rooms += it }
-    var room27: Room = Room().apply { name = "Room 27" }.also { rooms += it }
-    var room28: Room = Room().apply { name = "Room 28" }.also { rooms += it }
-    var room29: Room = Room().apply { name = "Room 29" }.also { rooms += it }
-    var room30: Room = Room().apply { name = "Room 30" }.also { rooms += it }
-    var room31: Room = Room().apply { name = "Room 31" }.also { rooms += it }
-    var room32: Room = Room().apply { name = "Room 32" }.also { rooms += it }
-    var room33: Room = Room().apply { name = "Room 33" }.also { rooms += it }
-    var room34: Room = Room().apply { name = "Room 34" }.also { rooms += it }
-    var room35: Room = Room().apply { name = "Room 35" }.also { rooms += it }
-    var room36: Room = Room().apply { name = "Room 36" }.also { rooms += it }
-    var room37: Room = Room().apply { name = "Room 37" }.also { rooms += it }
 
     // Live scene elements
     lateinit var background: TextureRect
@@ -146,8 +108,6 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
     lateinit var pressKey: Label
 
     // Enemies
-    var occupiedRooms = mutableListOf<Room>()
-    var enemies = mutableListOf<Enemy>()
     lateinit var eyesEnemy: EyesEnemy
     lateinit var soundEnemy: SoundEnemy
     lateinit var hearingEnemy: HearingEnemy
@@ -192,52 +152,9 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
     var collected: Int = 0
     var cluesRequired: Int = 5
 
-    var exitRooms = listOf(room1, room25, room33);
-
     override fun onReady() {
-        // Tree of doom...
-        room1.leftRoom = room2
-        room2.upRoom = room3
-        room3.upRoom = room4
-        room4.leftRoom = room5
-        room5.upRoom = room6
-        room6.upRoom = room7
-        room7.upRoom = room8
-        room8.upRoom = room9
-        room9.rightRoom = room10
-        room10.rightRoom = room11
-        room11.rightRoom = room12
-        room12.rightRoom = room13
-        room13.downRoom = room14
-        room14.downRoom = room15
-        room15.downRoom = room16
-        room16.downRoom = room17
-        room17.leftRoom = room18
-        room18.leftRoom = room19
-        room18.downRoom = room20
-        room20.downRoom = room21
-        room21.leftRoom = room1
-        room19.leftRoom = room4
-        room7.leftRoom = room31
-        room31.leftRoom = room32
-        room32.upRoom = room33
-        room33.upRoom = room34
-        room34.upRoom = room35
-        room35.rightRoom = room36
-        room36.rightRoom = room37
-        room37.rightRoom = room22
-        room11.upRoom = room22
-        room22.upRoom = room23
-        room23.rightRoom = room24
-        room24.rightRoom = room25
-        room25.rightRoom = room26
-        room26.downRoom = room27
-        room27.downRoom = room28
-        room28.downRoom = room29
-        room29.downRoom = room30
-        room30.leftRoom = room15
-
-        currRoom = room1
+        currRoom = level.initialRoom
+        direction = level.initialDirection
 
         bg = ImageTexture(labyrinth.assetManager.loadTexture("background.png"))
         leftBg = ImageTexture(labyrinth.assetManager.loadTexture("background_end_2.png"))
@@ -277,25 +194,30 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
         }
         addChild(clue)
 
-        eyesEnemy = EyesEnemy(labyrinth).apply { room = room11; visible = false }
+        eyesEnemy = EyesEnemy(labyrinth).apply { visible = false }
         addChild(eyesEnemy)
-        enemies += eyesEnemy
+        level.enemies += eyesEnemy
+        moveEnemyRandom(eyesEnemy)
 
-        soundEnemy = SoundEnemy(labyrinth).apply { room = room30; visible = false }
+        soundEnemy = SoundEnemy(labyrinth).apply { visible = false }
         addChild(soundEnemy)
-        enemies += soundEnemy
+        level.enemies += soundEnemy
+        moveEnemyRandom(soundEnemy)
 
-        hearingEnemy = HearingEnemy(labyrinth).apply { room = room35; visible = false }
+        hearingEnemy = HearingEnemy(labyrinth).apply { visible = false }
         addChild(hearingEnemy)
-        enemies += hearingEnemy
+        level.enemies += hearingEnemy
+        moveEnemyRandom(hearingEnemy)
 
-        stomperEnemy = StomperEnemy(labyrinth).apply { room = room7; visible = false }
+        stomperEnemy = StomperEnemy(labyrinth).apply { visible = false }
         addChild(stomperEnemy)
-        enemies += stomperEnemy
+        level.enemies += stomperEnemy
+        moveEnemyRandom(stomperEnemy)
 
-        sneakerEnemy = SneakerEnemy(labyrinth).apply { room = room4; visible = false }
+        sneakerEnemy = SneakerEnemy(labyrinth).apply { visible = false }
         addChild(sneakerEnemy)
-        enemies += sneakerEnemy
+        level.enemies += sneakerEnemy
+        moveEnemyRandom(sneakerEnemy)
 
         pole1 = TextureRect().apply {
             texture = ImageTexture(labyrinth.assetManager.loadTexture("pole_1.png"))
@@ -412,7 +334,7 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
         }
         addChild(cluesCollected)
 
-        clueRoom = rooms.filter { it !in listOf(room1, room2, room3, room4, room20, room21, room33, room25) }.random()
+        clueRoom = level.rooms.filter { it !in level.exemptInitialClueRooms }.random()
 
         currentObjective = Label().apply {
             text = "Objective: Find the clue at ${clueRoom?.name.toString()}."
@@ -551,13 +473,13 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
                     cluesCollected.text = "All Clues Collected."
                     currentObjective.text = "Objective: Leave Through an Exit."
                 } else {
-                    clueRoom = rooms.filter { it !in listOf(room25, room33, room1, currRoom) }.random()
+                    clueRoom = level.getRoomsInRange(currRoom!!, 7, 8).filter { it !in level.exemptClueRooms }.random()
                     cluesCollected.text = "Clues Collected: $collected/$cluesRequired"
                     currentObjective.text = "Objective: Find the Clue in ${clueRoom?.name}."
                 }
                 pressKey.visible = false
             }
-            if(currRoom in exitRooms) {
+            if(currRoom in level.exitRooms) {
                 if(collected >= cluesRequired) {
                     audioMaster.stop()
                     ambience.stop()
@@ -581,16 +503,16 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
     }
 
     fun onTimerDone() {
-        for (enemy in enemies) {
+        for (enemy in level.enemies) {
             if(enemy.roll()) {
                 val oldRoom = enemy.room
-                val availableRooms = rooms.let { enemy.pickRoom() }
+                val availableRooms = level.rooms.let { enemy.pickRoom() }
                     ?.let { listOf(it) }
-                    ?.filter { it !in occupiedRooms || it == oldRoom }
+                    ?.filter { it !in level.occupiedRooms || it == oldRoom }
                 val selectedRoom = availableRooms?.randomOrNull() ?: continue
                 enemy.room = selectedRoom
-                occupiedRooms.add(selectedRoom)
-                occupiedRooms.remove(oldRoom)
+                level.occupiedRooms.add(selectedRoom)
+                level.occupiedRooms.remove(oldRoom)
 
                 println("$enemy enemy moved to: ${selectedRoom.name}")
 
@@ -614,7 +536,7 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
         roomName.text = room.name
 
         val isClueRoom = currRoom == clueRoom
-        val isExitRoom = currRoom in exitRooms
+        val isExitRoom = currRoom in level.exitRooms
 
         clue.visible = isClueRoom
         pressKey.visible = isClueRoom || isExitRoom
@@ -622,11 +544,11 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
         if(clueRoom === currRoom) {
             pressKey.text = "Press F to Pick Up Clue."
         }
-        if(currRoom in exitRooms) {
+        if(currRoom in level.exitRooms) {
             pressKey.text = "Press F to Leave."
         }
 
-        for(enemy in enemies) {
+        for(enemy in level.enemies) {
             if(enemy.room === currRoom) {
                 if(enemy.type != EnemyType.STOMPER && isHuntedByStomper) {
                     moveEnemyRandom(enemy)
@@ -644,8 +566,7 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
                 isInDanger = false
                 currentEnemy!!.visible = false
                 (currentEnemy as StomperEnemy).encounterSound.stop()
-                resolveSound.audio = resolveAudios.random()
-                resolveSound.play()
+                (currentEnemy as StomperEnemy).resolutionSound.play()
                 moveEnemyRandom(currentEnemy!!)
                 currentEnemy = null
                 movesNeeded = 0
@@ -681,7 +602,7 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
         }
 
         if(enemy is SneakerEnemy) {
-            sneakerTimeNeeded = (Math.random() * 5.0) + 1.0
+            sneakerTimeNeeded = (Math.random() * 5.0) + 2.0
         }
 
         if(enemy is StomperEnemy) {
@@ -769,9 +690,7 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
                 if(sneakerTimeWaited >= sneakerTimeNeeded) {
                     isInDanger = false
                     currentEnemy!!.visible = false
-                    (currentEnemy as SneakerEnemy).goSound.play()
-                    resolveSound.audio = labyrinth.audioManager.loadAudio("giggle7.wav")
-                    resolveSound.play()
+                    (currentEnemy as SneakerEnemy).resolutionSound.play()
                     moveEnemyRandom(currentEnemy!!)
                     currentEnemy = null
                     sneakerTimeWaited = 0.0
@@ -963,11 +882,11 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node(
 
     private fun moveEnemyRandom(enemy: Enemy) {
         val oldRoom = enemy.room
-        val availableRooms = rooms.filter { it !in occupiedRooms || it == oldRoom || it != currRoom}
+        val availableRooms = level.rooms.filter { it !in level.occupiedRooms || it == oldRoom || it != currRoom}
         val selectedRoom = availableRooms.random()
         enemy.room = selectedRoom
-        occupiedRooms.add(selectedRoom)
-        occupiedRooms.remove(oldRoom)
+        level.occupiedRooms.add(selectedRoom)
+        level.occupiedRooms.remove(oldRoom)
 
         println("$enemy enemy relocated to: ${selectedRoom.name}, after successful counter.")
     }
