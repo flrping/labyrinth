@@ -5,7 +5,7 @@ You: Uhh... should I be solo? I am fairly new to this department.
 Chief: You have done good work these past few months. I think you can handle this and make a better impression.
 Chief: They have been discussing your promotion because of it. They will have you at my rank.
 Chief: You have been wanting a promotion, no?
-You: Yes, but this seems a bit...
+You: Yes, but this seems a bit....
 Chief: It isn't complicated, all you have to do is look around and report your findings. You'll find a way.
 You: This location does not seem stable though. We need more units if I were to go.
 Chief: You should be on your way now. We need units on other things. We shouldn't put too much on a recon job.
@@ -15,11 +15,13 @@ Chief: Just do your job.
 [Screen 2]
 You: I guess this is it. Depressing.
 You: Many noise complaints come from this place. Civilians think it's the homeless.
-You: If only we had better policies.....
+You: If only we had better policies....
 You: Sigh, let's get going.
 
 [Screen 3 / 4]
 You: The entrance is completely blocked by rubble.
 You: Everywhere else is just dense foliage. I can't go anywhere else...
 You: There is just this open vent, it seems to lead inside. Should I really do this?
-You: Just a recon job huh....
+You: Just a recon job hmm. Well I can't go back empty-handed.
+You: If I do, I may go back to my old department....
+You: I need to find something.

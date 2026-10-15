@@ -709,10 +709,10 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val lev
         val currentRoom = currRoom ?: return
 
         val inputDirection = when {
-            Input.wasKeyPressed(Key.UP) -> 0
-            Input.wasKeyPressed(Key.RIGHT) -> 1
-            Input.wasKeyPressed(Key.DOWN) -> 2
-            Input.wasKeyPressed(Key.LEFT) -> 3
+            Input.wasKeyPressed(Key.UP) || Input.wasKeyPressed(Key.W) -> 0
+            Input.wasKeyPressed(Key.RIGHT) || Input.wasKeyPressed(Key.D) -> 1
+            Input.wasKeyPressed(Key.DOWN) ||  Input.wasKeyPressed(Key.S)-> 2
+            Input.wasKeyPressed(Key.LEFT) || Input.wasKeyPressed(Key.A) -> 3
             else -> return
         }
 

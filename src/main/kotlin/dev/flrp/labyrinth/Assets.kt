@@ -40,7 +40,16 @@ object Assets {
         "gameoverbg.png",
         "nineslicebutton.png",
         "nineslicebutton_active.png",
-        "earplugs.png"
+        "earplugs.png",
+        "story1.png",
+        "story2.png",
+        "story3.png",
+        "story4.png",
+        "map_1.png",
+        "map_2.png",
+        "map_3.png",
+        "sneaker.png",
+        "stomper.png"
     )
 
     fun loadAllTextures(labyrinth: Labyrinth) {
@@ -105,6 +114,8 @@ object Assets {
         "the_stomper_encounter.wav",
         "the_sneaker_encounter.wav",
         "run_away_resolution.wav",
+        "bubble.wav",
+        "shoot.wav"
     )
 
     fun loadAllSounds(labyrinth: Labyrinth) {

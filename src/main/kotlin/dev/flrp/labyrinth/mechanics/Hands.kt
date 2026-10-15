@@ -23,7 +23,16 @@ class Hands(val labyrinth: Labyrinth, val sound: Sound) : TextureRect() {
     }
 
     override fun onUpdate(delta: Double) {
-        if (Input.wasKeyPressed(Key.UP) || Input.wasKeyPressed(Key.DOWN) || Input.wasKeyPressed(Key.LEFT) || Input.wasKeyPressed(Key.RIGHT)) {
+        if (
+            Input.wasKeyPressed(Key.UP)
+            || Input.wasKeyPressed(Key.DOWN)
+            || Input.wasKeyPressed(Key.LEFT)
+            || Input.wasKeyPressed(Key.RIGHT)
+            || Input.wasKeyPressed(Key.W)
+            || Input.wasKeyPressed(Key.A)
+            || Input.wasKeyPressed(Key.S)
+            || Input.wasKeyPressed(Key.D)
+        ) {
             isRightPlaced = !isRightPlaced
             texture = if(isRightPlaced) {
                 hand2Texture

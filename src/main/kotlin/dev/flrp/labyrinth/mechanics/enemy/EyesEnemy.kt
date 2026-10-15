@@ -11,6 +11,8 @@ class EyesEnemy(val labyrinth: Labyrinth) : Enemy() {
     override val type: EnemyType = EnemyType.EYES
     override lateinit var encounterSound: Sound
     override lateinit var jumpscareSound: Sound
+    override var description: String = "Covered in faces and big eyes. It wants to look at you."
+    override var resolution: String = "To counter this creature, you need to block it's view. Preferably with something that attaches to your face. Do not use paper."
 
     override fun onReady() {
         texture = ImageTexture(labyrinth.assetManager.loadTexture("eyes.png"))

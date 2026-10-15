@@ -12,6 +12,8 @@ abstract class Enemy : TextureRect() {
     abstract val type: EnemyType
     abstract var encounterSound: Sound
     abstract var jumpscareSound: Sound
+    abstract var description: String
+    abstract var resolution: String
 
     open var room: Room? = null
     open var aiValue = 10

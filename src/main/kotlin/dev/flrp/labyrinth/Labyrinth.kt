@@ -33,6 +33,8 @@ class Labyrinth : Game() {
             field = value.coerceIn(0.0, 2.0)
         }
 
+    var sawIntro = false
+
     override fun config() {
         title = "Labyrinth"
         width = 1366
@@ -54,6 +56,13 @@ class Labyrinth : Game() {
         globals.addChild(audioMaster)
 
         setInitialScreen(TitleScreen(this, audioMaster))
+    }
+
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            Labyrinth().run()
+        }
     }
 
 }

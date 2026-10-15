@@ -11,6 +11,8 @@ class HearingEnemy(val labyrinth: Labyrinth) : Enemy() {
     override val type: EnemyType = EnemyType.HEARING
     override lateinit var encounterSound: Sound
     override lateinit var jumpscareSound: Sound
+    override var description: String = "Covered in ears. Pitch black. It wants you to hear its song."
+    override var resolution: String = "To counter this creature, you need to cover your ears. You should have something that does just that."
 
     override fun onReady() {
         texture = ImageTexture(labyrinth.assetManager.loadTexture("hearing.png"))

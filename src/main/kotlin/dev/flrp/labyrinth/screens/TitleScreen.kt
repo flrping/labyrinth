@@ -47,10 +47,14 @@ class TitleScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node
 
         val startButton = object : NineSliceButton(nineSliceTexture, nineSliceTextureActive) {
             override fun onMouseClick(position: Vector2, action: MouseButton) {
-                labyrinth.changeScreen(GameScreen(labyrinth, audioMaster, FirstLevel()))
+                if(labyrinth.sawIntro) {
+                    labyrinth.changeScreen(GameScreen(labyrinth, audioMaster, FirstLevel()))
+                } else {
+                    labyrinth.changeScreen(StoryScreen(labyrinth, audioMaster))
+                }
             }
         }.apply {
-            text = "Start"
+            text = "Story Mode"
             position = Vector2(125f, 200f)
             fontSettings = FontSettings().apply {
                 font = labyrinth.assetManager.loadFont("JockeyOne", 24)
@@ -64,13 +68,32 @@ class TitleScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node
         }
         addChild(startButton)
 
+        val freePlayButton = object : NineSliceButton(nineSliceTexture, nineSliceTextureActive) {
+            override fun onMouseClick(position: Vector2, action: MouseButton) {
+
+            }
+        }.apply {
+            text = "Free Play"
+            position = Vector2(125f, 275f)
+            fontSettings = FontSettings().apply {
+                font = labyrinth.assetManager.loadFont("JockeyOne", 24)
+                textDecoration = TextDecoration().apply {
+                    strokeColor = Color.WHITE
+                    textPosition = TextPosition.CENTER
+                    textAlign = TextAlign.CENTER
+                }
+            }
+            size = Vector2(150f, 50f)
+        }
+        addChild(freePlayButton)
+
         val settingsButton = object : NineSliceButton(nineSliceTexture, nineSliceTextureActive) {
             override fun onMouseClick(position: Vector2, action: MouseButton) {
                 labyrinth.changeScreen(SettingsScreen(labyrinth, audioMaster))
             }
         }.apply {
             text = "Settings"
-            position = Vector2(125f, 275f)
+            position = Vector2(125f, 350f)
             fontSettings = FontSettings().apply {
                 font = labyrinth.assetManager.loadFont("JockeyOne", 24)
                 textDecoration = TextDecoration().apply {
@@ -89,7 +112,7 @@ class TitleScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node
             }
         }.apply {
             text = "Credits"
-            position = Vector2(125f, 350f)
+            position = Vector2(125f, 425f)
             fontSettings = FontSettings().apply {
                 font = labyrinth.assetManager.loadFont("JockeyOne", 24)
                 textDecoration = TextDecoration().apply {
@@ -108,7 +131,7 @@ class TitleScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node
             }
         }.apply {
             text = "How to Play"
-            position = Vector2(125f, 425f)
+            position = Vector2(125f, 500f)
             fontSettings = FontSettings().apply {
                 font = labyrinth.assetManager.loadFont("JockeyOne", 24)
                 textDecoration = TextDecoration().apply {

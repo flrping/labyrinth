@@ -13,6 +13,8 @@ class SoundEnemy(val labyrinth: Labyrinth) : Enemy() {
     override lateinit var encounterSound: Sound
     override lateinit var jumpscareSound: Sound
     lateinit var sound: Sound
+    override var description: String = "Covered in mouths. It is crying. It is looking for an exact response."
+    override var resolution: String = "To counter this creature, you need to follow its orders. You need to make sound just like it."
 
     var isRecalling: Boolean = false
     var amount: Int = 0;
