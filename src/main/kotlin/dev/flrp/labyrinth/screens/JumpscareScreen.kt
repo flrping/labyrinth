@@ -11,7 +11,15 @@ import dev.flrp.labyrinth.mechanics.enemy.SneakerEnemy
 import dev.flrp.labyrinth.mechanics.enemy.SoundEnemy
 import dev.flrp.labyrinth.mechanics.enemy.StomperEnemy
 
-class JumpscareScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val enemyType: EnemyType, val didTransform: Boolean) : Node() {
+class JumpscareScreen(
+    val labyrinth: Labyrinth,
+    val audioMaster: AudioMaster,
+    val enemyType: EnemyType,
+    val didTransform: Boolean,
+    val isStoryMode: Boolean,
+    val levelNum: Int,
+    val enemyValues: Map<EnemyType, Int>
+) : Node() {
 
     lateinit var enemy: Enemy
     lateinit var timer: Timer
@@ -51,7 +59,7 @@ class JumpscareScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, va
             } else {
                 GameOverType.DIED
             }
-            labyrinth.changeScreen(GameOverScreen(labyrinth, audioMaster, type))
+            labyrinth.changeScreen(GameOverScreen(labyrinth, audioMaster, type, isStoryMode, levelNum, enemyValues))
         }
     }
 

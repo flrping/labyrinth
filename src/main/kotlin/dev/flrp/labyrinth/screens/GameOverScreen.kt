@@ -12,13 +12,23 @@ import com.wyrmlings.rune.ui.style.text.TextAlign
 import com.wyrmlings.rune.ui.style.text.TextDecoration
 import com.wyrmlings.rune.ui.style.text.TextPosition
 import com.wyrmlings.rune.ui.texture.ImageTexture
+import dev.flrp.labyrinth.Defaults
 import dev.flrp.labyrinth.Labyrinth
 import dev.flrp.labyrinth.audio.AudioMaster
 import dev.flrp.labyrinth.audio.EndingTheme
 import dev.flrp.labyrinth.mechanics.structure.FirstLevel
+import dev.flrp.labyrinth.mechanics.structure.SecondLevel
+import dev.flrp.labyrinth.mechanics.structure.ThirdLevel
 import dev.flrp.labyrinth.ui.NineSliceButton
 
-class GameOverScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val gameOverType: GameOverType) : Node() {
+class GameOverScreen(
+    val labyrinth: Labyrinth,
+    val audioMaster: AudioMaster,
+    val gameOverType: GameOverType,
+    val isStoryMode: Boolean,
+    val levelNum: Int,
+    val enemyValues: Map<EnemyType, Int>
+) : Node() {
 
     lateinit var heading: Label
     lateinit var description: Label
@@ -30,6 +40,13 @@ class GameOverScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val
     var frameSpeed: Int = 1
 
     override fun onReady() {
+        if(gameOverType == GameOverType.WIN && isStoryMode) {
+            when(levelNum) {
+                2 -> labyrinth.beatLevelTwo = true
+                3 -> labyrinth.beatLevelThree = true
+                else -> labyrinth.beatLevelOne = true
+            }
+        }
 
         textureRect = TextureRect().apply {
             size = Vector2(labyrinth.width.toFloat(), labyrinth.height.toFloat())
@@ -145,12 +162,76 @@ class GameOverScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val
 
         runAgainButton  = object : NineSliceButton(nineSliceTexture, nineSliceTextureActive) {
             override fun onMouseClick(position: Vector2, action: MouseButton) {
-                labyrinth.changeScreen(GameScreen(labyrinth, audioMaster, FirstLevel()))
+                if(isStoryMode) {
+                    when {
+                        labyrinth.beatLevelOne && !labyrinth.beatLevelTwo -> {
+                            if (labyrinth.sawSecondCutscene) {
+                                labyrinth.changeScreen(
+                                    GameScreen(
+                                        labyrinth,
+                                        audioMaster,
+                                        SecondLevel(),
+                                        true,
+                                        2,
+                                        Defaults.LEVEL_TWO_DEFAULTS
+                                    )
+                                )
+                            } else {
+                                labyrinth.changeScreen(SecondStoryScreen(labyrinth, audioMaster))
+                            }
+                        }
+
+                        labyrinth.beatLevelTwo && !labyrinth.beatLevelThree -> {
+                            if (labyrinth.sawThirdCutscene) {
+                                labyrinth.changeScreen(
+                                    GameScreen(
+                                        labyrinth,
+                                        audioMaster,
+                                        ThirdLevel(),
+                                        true,
+                                        3,
+                                        Defaults.LEVEL_THREE_DEFAULTS
+                                    )
+                                )
+                            } else {
+                                labyrinth.changeScreen(ThirdStoryScreen(labyrinth, audioMaster))
+                            }
+                        }
+
+                        labyrinth.beatLevelThree -> {
+                            labyrinth.changeScreen(FinalStoryScreen(labyrinth, audioMaster))
+                        }
+
+                        else -> {
+                            if (labyrinth.sawIntro) {
+                                labyrinth.changeScreen(
+                                    GameScreen(
+                                        labyrinth,
+                                        audioMaster,
+                                        FirstLevel(),
+                                        true,
+                                        1,
+                                        Defaults.LEVEL_ONE_DEFAULTS
+                                    )
+                                )
+                            } else {
+                                labyrinth.changeScreen(IntroStoryScreen(labyrinth, audioMaster))
+                            }
+                        }
+                    }
+                } else {
+                    val level = when(levelNum) {
+                        2 -> SecondLevel()
+                        3 -> ThirdLevel()
+                        else -> FirstLevel()
+                    }
+                    labyrinth.changeScreen(GameScreen(labyrinth, audioMaster, level, false, levelNum, enemyValues))
+                }
             }
         }.apply {
             position = Vector2(700f, 550f)
             size = Vector2(150f, 50f)
-            text = "Run Again"
+            text = if(isStoryMode && gameOverType == GameOverType.WIN) "Continue" else "Run Again"
             fontSettings = FontSettings().apply {
                 font = labyrinth.assetManager.loadFont("JockeyOne", 36)
                 textDecoration = TextDecoration().apply {

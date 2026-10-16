@@ -5,26 +5,25 @@ import com.wyrmlings.rune.input.Key
 import com.wyrmlings.rune.math.Vector2
 import com.wyrmlings.rune.node.Node
 import com.wyrmlings.rune.node.Sound
+import com.wyrmlings.rune.node.xy.ui.ColorRect
 import com.wyrmlings.rune.node.xy.ui.Label
 import com.wyrmlings.rune.node.xy.ui.NineSliceRect
-import com.wyrmlings.rune.node.xy.ui.TextureRect
 import com.wyrmlings.rune.property.Color
+import com.wyrmlings.rune.ui.style.container.FlatContainer
 import com.wyrmlings.rune.ui.style.text.FontSettings
 import com.wyrmlings.rune.ui.style.text.TextDecoration
 import com.wyrmlings.rune.ui.texture.ImageTexture
+import dev.flrp.labyrinth.Defaults
 import dev.flrp.labyrinth.Labyrinth
 import dev.flrp.labyrinth.audio.AudioMaster
+import dev.flrp.labyrinth.audio.TitleTheme
 import dev.flrp.labyrinth.mechanics.structure.DialogueLine
 import dev.flrp.labyrinth.mechanics.structure.FirstLevel
+import dev.flrp.labyrinth.mechanics.structure.SecondLevel
 
-class StoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node() {
+class SecondStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node() {
 
-    lateinit var story1: ImageTexture
-    lateinit var story2: ImageTexture
-    lateinit var story3: ImageTexture
-    lateinit var story4: ImageTexture
-
-    lateinit var background: TextureRect
+    lateinit var background: ColorRect
     lateinit var textBackground: NineSliceRect
     lateinit var speaker: Label
     lateinit var text: Label
@@ -35,37 +34,22 @@ class StoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node
     lateinit var bunbunSound: Sound
 
     val dialogueLines = listOf(
-        DialogueLine("You", "You called?"),
-        DialogueLine("Chief", "We have you on a new case. Here's the debreif."),
-        DialogueLine("You", "Uhh... should I be solo? I am fairly new to this department."),
-        DialogueLine("Chief", "You have done good work these past few months. I think you can handle this and make a better impression."),
-        DialogueLine("Chief", "They have been discussing your promotion because of it. They will have you at my rank."),
-        DialogueLine("Chief", "You have been wanting a promotion, no?"),
-        DialogueLine("You", "Yes, but this seems a bit...."),
-        DialogueLine("Chief", "It isn't complicated, all you have to do is look around and report your findings. You'll find a way."),
-        DialogueLine("You", "This location does not seem stable though. We need more units if I were to go."),
-        DialogueLine("Chief", "You should be on your way now. We need units on other things. We shouldn't put too much on a recon job."),
-        DialogueLine("You", "But-"),
-        DialogueLine("Chief", "Just do your job."),
-
-        //
-        DialogueLine("You", "I guess this is it. Depressing."),
-        DialogueLine("You", "Many noise complaints come from this place. Civilians think it's the homeless."),
-        DialogueLine("You", "If only we had better policies...."),
-        DialogueLine("", "*Boom* *Bang*", labyrinth.audioManager.loadAudio("the_stomper_encounter.wav")),
-        DialogueLine("", "*Boom* *Bang*", labyrinth.audioManager.loadAudio("the_stomper_encounter.wav")),
-        DialogueLine("", "Hahahaha....", labyrinth.audioManager.loadAudio("giggle3.wav")),
-        DialogueLine("You", "What on earth?!"),
-
-        //
-        DialogueLine("You", "Those noises...."),
-        DialogueLine("You", "The entrance is completely blocked by rubble."),
-        DialogueLine("You", "Everywhere else is just dense foliage. I can't go anywhere else..."),
-
-        //
-        DialogueLine("You", "There is just this open vent, it seems to lead inside. Should I really do this alone?"),
-        DialogueLine("You", "Well I can't go back empty-handed. The weird noises I heard too. Hmm."),
-        DialogueLine("You", "I need to figure this out."),
+        DialogueLine("", "*Bzzzt*"),
+        DialogueLine("You", "Checking in, Chief. I managed to collect some clues."),
+        DialogueLine("You", "I also managed to escape with my life."),
+        DialogueLine("Chief", "What are you talking about?"),
+        DialogueLine("You", "This structure is full of weird creatures. Stuff I've never seen before."),
+        DialogueLine("Chief", "Stop messing with me. Now is not the time."),
+        DialogueLine("You", "I'm not though.... I am on my way back now."),
+        DialogueLine("Chief", "Listen."),
+        DialogueLine("Chief", "I need you to go back in there."),
+        DialogueLine("You", "What? No. I can't. Send more units."),
+        DialogueLine("Chief", "No, listen. This is something only you can do."),
+        DialogueLine("Chief", "You didn't spend long down there. I need you to look around more."),
+        DialogueLine("Chief", "Promotion, remember?"),
+        DialogueLine("You", "....... You're kidding me."),
+        DialogueLine("Chief", "We need to build this case. Lives depend on it."),
+        DialogueLine("You", "Fine."),
     )
 
     var index = 0
@@ -74,14 +58,10 @@ class StoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node
     var finishedTimer = 0.0
 
     override fun onReady() {
-
-        story1 = ImageTexture(labyrinth.assetManager.loadTexture("story1.png"))
-        story2 = ImageTexture(labyrinth.assetManager.loadTexture("story2.png"))
-        story3 = ImageTexture(labyrinth.assetManager.loadTexture("story3.png"))
-        story4 = ImageTexture(labyrinth.assetManager.loadTexture("story4.png"))
-
-        background = TextureRect().apply {
-            texture = story1
+        background = ColorRect().apply {
+            container = FlatContainer().apply {
+                fillColor = Color.fromHex("#424242")
+            }
             size = Vector2(labyrinth.width.toFloat(), labyrinth.height.toFloat())
         }
         addChild(background)
@@ -155,12 +135,27 @@ class StoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node
             pitch = 1.2f
         }
         addChild(bunbunSound)
+
+        val theme = TitleTheme(labyrinth)
+        if (audioMaster.theme?.name != theme.name) {
+            audioMaster.theme = theme
+            audioMaster.play()
+        }
     }
 
     override fun onUpdate(delta: Double) {
         if(Input.wasKeyPressed(Key.ENTER)) {
-            labyrinth.sawIntro = true
-            labyrinth.changeScreen(GameScreen(labyrinth, audioMaster, FirstLevel()))
+            labyrinth.sawSecondCutscene = true
+            labyrinth.changeScreen(
+                GameScreen(
+                    labyrinth,
+                    audioMaster,
+                    SecondLevel(),
+                    true,
+                    2,
+                    Defaults.LEVEL_TWO_DEFAULTS
+                )
+            )
         }
 
         if (index >= dialogueLines.size) return
@@ -215,17 +210,18 @@ class StoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node
     }
 
     fun onDialogueChange() {
-
-        when(index) {
-            12 -> background.texture = story2
-            19 -> background.texture = story3
-            23 -> background.texture = story4
-        }
-
         if(index >= dialogueLines.size) {
-            labyrinth.sawIntro = true
-            labyrinth.changeScreen(GameScreen(labyrinth, audioMaster, FirstLevel()))
+            labyrinth.sawSecondCutscene = true
+            labyrinth.changeScreen(
+                GameScreen(
+                    labyrinth,
+                    audioMaster,
+                    SecondLevel(),
+                    true,
+                    2,
+                    Defaults.LEVEL_TWO_DEFAULTS
+                )
+            )
         }
-
     }
 }

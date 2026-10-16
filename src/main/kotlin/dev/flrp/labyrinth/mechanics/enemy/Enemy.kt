@@ -2,7 +2,6 @@ package dev.flrp.labyrinth.mechanics.enemy
 
 import com.wyrmlings.rune.node.Sound
 import com.wyrmlings.rune.node.xy.ui.TextureRect
-import com.wyrmlings.rune.resource.Audio
 import dev.flrp.labyrinth.mechanics.structure.Room
 import dev.flrp.labyrinth.screens.EnemyType
 import kotlin.math.floor
@@ -16,10 +15,10 @@ abstract class Enemy : TextureRect() {
     abstract var resolution: String
 
     open var room: Room? = null
-    open var aiValue = 10
+    open var aiValue = 3
 
     open fun roll(): Boolean {
-        return aiValue > floor(Math.random() * 21)
+        return aiValue >= floor(Math.random() * 21)
     }
 
     open fun pickRoom(): Room? {

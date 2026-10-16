@@ -45,6 +45,7 @@ class FirstLevel : Level() {
     override var exitRooms = mutableListOf(initialRoom, room25, room33);
     override var exemptInitialClueRooms: MutableList<Room>
     override var exemptClueRooms = exitRooms
+    override var mapTexture: String = "map_1.png"
 
     override fun setupRooms() {
         room1.leftRoom = room2

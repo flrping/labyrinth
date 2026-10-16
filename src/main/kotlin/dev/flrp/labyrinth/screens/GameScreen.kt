@@ -32,7 +32,14 @@ import kotlin.collections.random
 import kotlin.math.floor
 import kotlin.random.Random
 
-class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val level: Level) : Node() {
+class GameScreen(
+    val labyrinth: Labyrinth,
+    val audioMaster: AudioMaster,
+    val level: Level,
+    val isStoryMode: Boolean,
+    val levelNum: Int,
+    val enemyValues: Map<EnemyType, Int> //= EnemyType.entries.associateWith { 5 }
+) : Node() {
 
     // Direction
     val directions = listOf("up", "right", "down", "left")
@@ -194,30 +201,85 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val lev
         }
         addChild(clue)
 
-        eyesEnemy = EyesEnemy(labyrinth).apply { visible = false }
-        addChild(eyesEnemy)
-        level.enemies += eyesEnemy
-        moveEnemyRandom(eyesEnemy)
+        if (enemyValues.getValue(EnemyType.EYES) > 0) {
+            eyesEnemy = EyesEnemy(labyrinth).apply {
+                visible = false
+                aiValue = enemyValues.getValue(EnemyType.EYES)
+            }
+            addChild(eyesEnemy)
+            level.enemies += eyesEnemy
+            moveEnemyRandom(eyesEnemy)
+        } else {
+            eyesEnemy = EyesEnemy(labyrinth).apply {
+                visible = false
+                aiValue = 0
+            }
+            addChild(eyesEnemy)
+        }
 
-        soundEnemy = SoundEnemy(labyrinth).apply { visible = false }
-        addChild(soundEnemy)
-        level.enemies += soundEnemy
-        moveEnemyRandom(soundEnemy)
+        if (enemyValues.getValue(EnemyType.SOUND) > 0) {
+            soundEnemy = SoundEnemy(labyrinth).apply {
+                visible = false
+                aiValue = enemyValues.getValue(EnemyType.SOUND)
+            }
+            addChild(soundEnemy)
+            level.enemies += soundEnemy
+            moveEnemyRandom(soundEnemy)
+        } else {
+            soundEnemy = SoundEnemy(labyrinth).apply {
+                visible = false
+                aiValue = 0
+            }
+            addChild(soundEnemy)
+        }
 
-        hearingEnemy = HearingEnemy(labyrinth).apply { visible = false }
-        addChild(hearingEnemy)
-        level.enemies += hearingEnemy
-        moveEnemyRandom(hearingEnemy)
+        if (enemyValues.getValue(EnemyType.HEARING) > 0) {
+            hearingEnemy = HearingEnemy(labyrinth).apply {
+                visible = false
+                aiValue = enemyValues.getValue(EnemyType.HEARING)
+            }
+            addChild(hearingEnemy)
+            level.enemies += hearingEnemy
+            moveEnemyRandom(hearingEnemy)
+        } else {
+            hearingEnemy = HearingEnemy(labyrinth).apply {
+                visible = false
+                aiValue = 0
+            }
+            addChild(hearingEnemy)
+        }
 
-        stomperEnemy = StomperEnemy(labyrinth).apply { visible = false }
-        addChild(stomperEnemy)
-        level.enemies += stomperEnemy
-        moveEnemyRandom(stomperEnemy)
+        if (enemyValues.getValue(EnemyType.STOMPER) > 0) {
+            stomperEnemy = StomperEnemy(labyrinth).apply {
+                visible = false
+                aiValue = enemyValues.getValue(EnemyType.STOMPER)
+            }
+            addChild(stomperEnemy)
+            level.enemies += stomperEnemy
+            moveEnemyRandom(stomperEnemy)
+        } else {
+            stomperEnemy = StomperEnemy(labyrinth).apply {
+                visible = false
+                aiValue = 0
+            }
+            addChild(stomperEnemy)
+        }
 
-        sneakerEnemy = SneakerEnemy(labyrinth).apply { visible = false }
-        addChild(sneakerEnemy)
-        level.enemies += sneakerEnemy
-        moveEnemyRandom(sneakerEnemy)
+        if (enemyValues.getValue(EnemyType.SNEAKER) > 0) {
+            sneakerEnemy = SneakerEnemy(labyrinth).apply {
+                visible = false
+                aiValue = enemyValues.getValue(EnemyType.SNEAKER)
+            }
+            addChild(sneakerEnemy)
+            level.enemies += sneakerEnemy
+            moveEnemyRandom(sneakerEnemy)
+        } else {
+            sneakerEnemy = SneakerEnemy(labyrinth).apply {
+                visible = false
+                aiValue = 0
+            }
+            addChild(sneakerEnemy)
+        }
 
         pole1 = TextureRect().apply {
             texture = ImageTexture(labyrinth.assetManager.loadTexture("pole_1.png"))
@@ -265,7 +327,7 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val lev
         addChild(earplugs)
 
         map = TextureRect().apply {
-            texture = ImageTexture(labyrinth.assetManager.loadTexture("map.png"))
+            texture = ImageTexture(labyrinth.assetManager.loadTexture(level.mapTexture))
             size = Vector2(labyrinth.width.toFloat(), labyrinth.height.toFloat())
             visible = false
         }
@@ -485,14 +547,14 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val lev
                     ambience.stop()
                     movement.stop()
                     currentEnemy?.encounterSound?.stop()
-                    labyrinth.changeScreen(GameOverScreen(labyrinth, audioMaster, GameOverType.WIN))
+                    labyrinth.changeScreen(GameOverScreen(labyrinth, audioMaster, GameOverType.WIN, isStoryMode, levelNum, enemyValues))
                     return
                 } else {
                     audioMaster.stop()
                     ambience.stop()
                     movement.stop()
                     currentEnemy?.encounterSound?.stop()
-                    labyrinth.changeScreen(GameOverScreen(labyrinth, audioMaster, GameOverType.RAN_AWAY))
+                    labyrinth.changeScreen(GameOverScreen(labyrinth, audioMaster, GameOverType.RAN_AWAY, isStoryMode, levelNum, enemyValues))
                     return
                 }
             }
@@ -749,9 +811,9 @@ class GameScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster, val lev
         movement.stop()
         enemy.encounterSound.stop()
         if(didTransform) {
-            labyrinth.changeScreen(JumpscareScreen(labyrinth, audioMaster, enemy.type, true))
+            labyrinth.changeScreen(JumpscareScreen(labyrinth, audioMaster, enemy.type, true, isStoryMode, levelNum, enemyValues))
         } else {
-            labyrinth.changeScreen(JumpscareScreen(labyrinth, audioMaster, enemy.type, false))
+            labyrinth.changeScreen(JumpscareScreen(labyrinth, audioMaster, enemy.type, false, isStoryMode, levelNum, enemyValues))
         }
 
     }

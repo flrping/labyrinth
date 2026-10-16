@@ -33,7 +33,15 @@ class Labyrinth : Game() {
             field = value.coerceIn(0.0, 2.0)
         }
 
+    var startedStory = false
+    var beatLevelOne = false
+    var beatLevelTwo = false
+    var beatLevelThree = false
+
     var sawIntro = false
+    var sawSecondCutscene = false
+    var sawThirdCutscene = false
+    var sawFinalCutscene = false
 
     override fun config() {
         title = "Labyrinth"

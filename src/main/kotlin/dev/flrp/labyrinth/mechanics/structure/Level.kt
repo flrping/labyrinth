@@ -13,6 +13,7 @@ abstract class Level {
 
     abstract var initialRoom: Room
     abstract var initialDirection: String
+    abstract var mapTexture: String
 
     abstract fun setupRooms()
 

@@ -1,6 +1,6 @@
 [Screen 1]
 You: You called?
-Chief: We have you on a new case. Here's the debreif.
+Chief: We have you on a new case. Here's the debrief.
 You: Uhh... should I be solo? I am fairly new to this department.
 Chief: You have done good work these past few months. I think you can handle this and make a better impression.
 Chief: They have been discussing your promotion because of it. They will have you at my rank.
