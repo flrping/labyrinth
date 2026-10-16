@@ -30,9 +30,9 @@ class CreditsScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : No
                 Programmer: Jaelyn (flrp)
                 Composer: Jaelyn (flrp)
                 Artist: Jaelyn (flrp)
-                Vocal Artists: 
-                    Hannah Chapin - https://linktr.ee/hannahdoesvo
-                    Hollis Lee - https://linktr.ee/hollis.lee.va
+                Vocal Artist: Hannah Chapin - https://linktr.ee/hannahdoesvo
+                Vocal Artist: Hollis Lee - https://linktr.ee/hollis.lee.va
+                Vocal Artist: Nathalie Emmanuel - https://x.com/nepvoices
                 SFX: PeteBarry, squarfington, modusmogulus, vestibule-door, designerschoice, 
                 HOrvi64, WasabiWielder, Samantha_Dolman, bouncyballblue, and others from freesound.org
             """.trimIndent()

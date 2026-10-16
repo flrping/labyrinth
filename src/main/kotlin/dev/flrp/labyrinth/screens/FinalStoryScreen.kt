@@ -52,9 +52,9 @@ class FinalStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) :
         DialogueLine("", "*Bzzzt* *Bzzzt*"),
         DialogueLine("Chief", "You were good. Too good. That is the problem."),
         DialogueLine("Unfamiliar Voice", "Come back.... Come back.... Come back."),
-        DialogueLine("", "*Laughs*"),
+        DialogueLine("", "*Laughs*", labyrinth.audioManager.loadAudio("giggle3.wav")),
         DialogueLine("Unfamiliar Voice", "We need you here.... We need you here."),
-        DialogueLine("", "*Bang Bang*"),
+        DialogueLine("", "*Bang Bang*", labyrinth.audioManager.loadAudio("the_stomper_encounter.wav")),
         DialogueLine("You", "**** this. I quit."),
     )
 
