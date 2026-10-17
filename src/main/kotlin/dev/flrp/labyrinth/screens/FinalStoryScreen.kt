@@ -5,11 +5,10 @@ import com.wyrmlings.rune.input.Key
 import com.wyrmlings.rune.math.Vector2
 import com.wyrmlings.rune.node.Node
 import com.wyrmlings.rune.node.Sound
-import com.wyrmlings.rune.node.xy.ui.ColorRect
 import com.wyrmlings.rune.node.xy.ui.Label
 import com.wyrmlings.rune.node.xy.ui.NineSliceRect
+import com.wyrmlings.rune.node.xy.ui.TextureRect
 import com.wyrmlings.rune.property.Color
-import com.wyrmlings.rune.ui.style.container.FlatContainer
 import com.wyrmlings.rune.ui.style.text.FontSettings
 import com.wyrmlings.rune.ui.style.text.TextDecoration
 import com.wyrmlings.rune.ui.texture.ImageTexture
@@ -20,7 +19,11 @@ import dev.flrp.labyrinth.mechanics.structure.DialogueLine
 
 class FinalStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node() {
 
-    lateinit var background: ColorRect
+    lateinit var story5: ImageTexture
+    lateinit var story6: ImageTexture
+    lateinit var story7: ImageTexture
+
+    lateinit var background: TextureRect
     lateinit var textBackground: NineSliceRect
     lateinit var speaker: Label
     lateinit var text: Label
@@ -64,10 +67,12 @@ class FinalStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) :
     var finishedTimer = 0.0
 
     override fun onReady() {
-        background = ColorRect().apply {
-            container = FlatContainer().apply {
-                fillColor = Color.fromHex("#424242")
-            }
+        story5 = ImageTexture(labyrinth.assetManager.loadTexture("story5.png"))
+        story6 = ImageTexture(labyrinth.assetManager.loadTexture("story6.png"))
+        story7 = ImageTexture(labyrinth.assetManager.loadTexture("story7.png"))
+
+        background = TextureRect().apply {
+            texture = story6
             size = Vector2(labyrinth.width.toFloat(), labyrinth.height.toFloat())
         }
         addChild(background)
@@ -218,6 +223,11 @@ class FinalStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) :
     }
 
     fun onDialogueChange() {
+        when(index) {
+            4 -> background.texture = story5
+            23 -> background.texture = story7
+        }
+
         if(index >= dialogueLines.size) {
             labyrinth.sawFinalCutscene = true
             labyrinth.changeScreen(

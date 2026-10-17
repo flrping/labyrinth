@@ -49,7 +49,10 @@ object Assets {
         "map_2.png",
         "map_3.png",
         "sneaker.png",
-        "stomper.png"
+        "stomper.png",
+        "story5.png",
+        "story6.png",
+        "story7.png"
     )
 
     fun loadAllTextures(labyrinth: Labyrinth) {

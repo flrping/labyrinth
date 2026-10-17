@@ -5,11 +5,10 @@ import com.wyrmlings.rune.input.Key
 import com.wyrmlings.rune.math.Vector2
 import com.wyrmlings.rune.node.Node
 import com.wyrmlings.rune.node.Sound
-import com.wyrmlings.rune.node.xy.ui.ColorRect
 import com.wyrmlings.rune.node.xy.ui.Label
 import com.wyrmlings.rune.node.xy.ui.NineSliceRect
+import com.wyrmlings.rune.node.xy.ui.TextureRect
 import com.wyrmlings.rune.property.Color
-import com.wyrmlings.rune.ui.style.container.FlatContainer
 import com.wyrmlings.rune.ui.style.text.FontSettings
 import com.wyrmlings.rune.ui.style.text.TextDecoration
 import com.wyrmlings.rune.ui.texture.ImageTexture
@@ -22,7 +21,9 @@ import dev.flrp.labyrinth.mechanics.structure.ThirdLevel
 
 class ThirdStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node() {
 
-    lateinit var background: ColorRect
+    lateinit var story5: ImageTexture
+
+    lateinit var background: TextureRect
     lateinit var textBackground: NineSliceRect
     lateinit var speaker: Label
     lateinit var text: Label
@@ -35,7 +36,7 @@ class ThirdStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) :
 
     val dialogueLines = listOf(
         DialogueLine("", "*Bzzzt*"),
-        DialogueLine("You", "Chief, it is getting really bad."),
+        DialogueLine("You", "Chief, it is getting really bad over here."),
         DialogueLine("You", "I really need more units."),
         DialogueLine("", "*Static*"),
         DialogueLine("You", "Hello?"),
@@ -56,10 +57,10 @@ class ThirdStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) :
     var finishedTimer = 0.0
 
     override fun onReady() {
-        background = ColorRect().apply {
-            container = FlatContainer().apply {
-                fillColor = Color.fromHex("#424242")
-            }
+        story5 = ImageTexture(labyrinth.assetManager.loadTexture("story5.png"))
+
+        background = TextureRect().apply {
+            texture = story5
             size = Vector2(labyrinth.width.toFloat(), labyrinth.height.toFloat())
         }
         addChild(background)
