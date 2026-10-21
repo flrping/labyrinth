@@ -42,7 +42,7 @@ class FirstLevel : Level() {
 
     override var initialDirection: String = "left"
     override var initialRoom: Room = room1
-    override var exitRooms = mutableListOf(initialRoom, room25, room33);
+    override var exitRooms = mutableListOf(initialRoom, room25, room33)
     override var exemptInitialClueRooms: MutableList<Room>
     override var exemptClueRooms = exitRooms
     override var mapTexture: String = "map_1.png"
@@ -92,7 +92,7 @@ class FirstLevel : Level() {
         initialRoom = room1
     }
 
-    init{
+    init {
         setupRooms()
         exemptInitialClueRooms = mutableListOf()
         exemptInitialClueRooms.add(initialRoom)

@@ -7,8 +7,6 @@ import java.util.concurrent.ConcurrentMap
 class EndingTheme(
     val labyrinth: Labyrinth,
     override val name: String = "Ending Theme",
-    override val length: Float = 6.85f,
-    override val tempo: Float = 140.00f,
     override val tracks: ConcurrentMap<String, Track> = ConcurrentHashMap()
 ) : Theme() {
 

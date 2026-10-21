@@ -46,7 +46,7 @@ class SecondLevel : Level() {
 
     override var initialDirection: String = "right"
     override var initialRoom: Room = room26
-    override var exitRooms = mutableListOf(initialRoom, room36);
+    override var exitRooms = mutableListOf(initialRoom, room36)
     override var exemptInitialClueRooms: MutableList<Room>
     override var exemptClueRooms = exitRooms
     override var mapTexture: String = "map_2.png"

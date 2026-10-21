@@ -22,7 +22,7 @@ abstract class Enemy : TextureRect() {
     }
 
     open fun pickRoom(): Room? {
-        if(room != null) {
+        if (room != null) {
             val rooms = mutableListOf<Room>()
             room!!.upRoom?.let { rooms += it }
             room!!.downRoom?.let { rooms += it }
@@ -31,7 +31,7 @@ abstract class Enemy : TextureRect() {
 
             return rooms.random()
         }
-        return null;
+        return null
     }
 
 }

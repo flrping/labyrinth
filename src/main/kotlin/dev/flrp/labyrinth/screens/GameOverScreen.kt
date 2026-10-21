@@ -40,8 +40,8 @@ class GameOverScreen(
     var frameSpeed: Int = 1
 
     override fun onReady() {
-        if(gameOverType == GameOverType.WIN && isStoryMode) {
-            when(levelNum) {
+        if (gameOverType == GameOverType.WIN && isStoryMode) {
+            when (levelNum) {
                 2 -> labyrinth.beatLevelTwo = true
                 3 -> labyrinth.beatLevelThree = true
                 else -> labyrinth.beatLevelOne = true
@@ -55,16 +55,19 @@ class GameOverScreen(
         addChild(textureRect)
 
         heading = Label().apply {
-            text = when(gameOverType) {
+            text = when (gameOverType) {
                 GameOverType.WIN -> {
                     "YOU ESCAPED"
                 }
+
                 GameOverType.RAN_AWAY -> {
                     "YOU RAN AWAY"
                 }
+
                 GameOverType.DIED -> {
                     "YOU DIED"
                 }
+
                 GameOverType.TRANSFORMED -> {
                     "YOU TRANSFORMED"
                 }
@@ -83,16 +86,19 @@ class GameOverScreen(
         addChild(heading)
 
         description = Label().apply {
-            text = when(gameOverType) {
+            text = when (gameOverType) {
                 GameOverType.WIN -> {
                     "You escaped with all clues."
                 }
+
                 GameOverType.RAN_AWAY -> {
                     "You escaped without finding all the clues."
                 }
+
                 GameOverType.DIED -> {
                     "You were very unfortunate."
                 }
+
                 GameOverType.TRANSFORMED -> {
                     "You became something else."
                 }
@@ -109,7 +115,7 @@ class GameOverScreen(
         }
         addChild(description)
 
-        val selectedSheets = when(gameOverType) {
+        val selectedSheets = when (gameOverType) {
             GameOverType.WIN -> {
                 frameSpeed = 5
                 labyrinth.assetManager.loadTexturesFromGIF("good_ending.gif")
@@ -160,9 +166,9 @@ class GameOverScreen(
         }
         addChild(titleButton)
 
-        runAgainButton  = object : NineSliceButton(nineSliceTexture, nineSliceTextureActive) {
+        runAgainButton = object : NineSliceButton(nineSliceTexture, nineSliceTextureActive) {
             override fun onMouseClick(position: Vector2, action: MouseButton) {
-                if(isStoryMode) {
+                if (isStoryMode) {
                     when {
                         labyrinth.beatLevelOne && !labyrinth.beatLevelTwo -> {
                             if (labyrinth.sawSecondCutscene) {
@@ -220,7 +226,7 @@ class GameOverScreen(
                         }
                     }
                 } else {
-                    val level = when(levelNum) {
+                    val level = when (levelNum) {
                         2 -> SecondLevel()
                         3 -> ThirdLevel()
                         else -> FirstLevel()
@@ -231,7 +237,7 @@ class GameOverScreen(
         }.apply {
             position = Vector2(700f, 550f)
             size = Vector2(150f, 50f)
-            text = if(isStoryMode && gameOverType == GameOverType.WIN) "Continue" else "Run Again"
+            text = if (isStoryMode && gameOverType == GameOverType.WIN) "Continue" else "Run Again"
             fontSettings = FontSettings().apply {
                 font = labyrinth.assetManager.loadFont("JockeyOne", 36)
                 textDecoration = TextDecoration().apply {

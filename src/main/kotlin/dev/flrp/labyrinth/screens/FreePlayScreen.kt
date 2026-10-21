@@ -15,11 +15,7 @@ import com.wyrmlings.rune.ui.style.text.TextPosition
 import com.wyrmlings.rune.ui.texture.ImageTexture
 import dev.flrp.labyrinth.Labyrinth
 import dev.flrp.labyrinth.audio.AudioMaster
-import dev.flrp.labyrinth.mechanics.enemy.EyesEnemy
-import dev.flrp.labyrinth.mechanics.enemy.HearingEnemy
-import dev.flrp.labyrinth.mechanics.enemy.SneakerEnemy
-import dev.flrp.labyrinth.mechanics.enemy.SoundEnemy
-import dev.flrp.labyrinth.mechanics.enemy.StomperEnemy
+import dev.flrp.labyrinth.mechanics.enemy.*
 import dev.flrp.labyrinth.mechanics.structure.FirstLevel
 import dev.flrp.labyrinth.mechanics.structure.SecondLevel
 import dev.flrp.labyrinth.mechanics.structure.ThirdLevel
@@ -77,7 +73,7 @@ class FreePlayScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : N
 
         val startButton = object : NineSliceButton(nineSliceTexture, nineSliceTextureActive) {
             override fun onMouseClick(position: Vector2, action: MouseButton) {
-                when(selectedMap) {
+                when (selectedMap) {
                     2 -> {
                         labyrinth.changeScreen(
                             GameScreen(
@@ -90,6 +86,7 @@ class FreePlayScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : N
                             )
                         )
                     }
+
                     3 -> {
                         labyrinth.changeScreen(
                             GameScreen(
@@ -102,6 +99,7 @@ class FreePlayScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : N
                             )
                         )
                     }
+
                     else -> {
                         labyrinth.changeScreen(
                             GameScreen(
@@ -143,12 +141,12 @@ class FreePlayScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : N
         stomperEnemy = StomperEnemy(labyrinth).apply { scale = 0.3f; visible = false; position = Vector2(700f, 0f) }
         addChild(stomperEnemy)
 
-        sneakerEnemy = SneakerEnemy(labyrinth).apply { scale = 0.3f; position = Vector2(980f, 20f)  }
+        sneakerEnemy = SneakerEnemy(labyrinth).apply { scale = 0.3f; position = Vector2(980f, 20f) }
         addChild(sneakerEnemy)
 
         val map1 = TextureRect().apply {
             texture = ImageTexture(labyrinth.assetManager.loadTexture("map_1.png"))
-            scale = 0.3f;
+            scale = 0.3f
             position = Vector2(240f, 300f)
             size = Vector2(labyrinth.width.toFloat(), labyrinth.height.toFloat())
         }
@@ -156,7 +154,7 @@ class FreePlayScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : N
 
         val map2 = TextureRect().apply {
             texture = ImageTexture(labyrinth.assetManager.loadTexture("map_2.png"))
-            scale = 0.3f;
+            scale = 0.3f
             position = Vector2(490f, 300f)
             size = Vector2(labyrinth.width.toFloat(), labyrinth.height.toFloat())
         }
@@ -164,7 +162,7 @@ class FreePlayScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : N
 
         val map3 = TextureRect().apply {
             texture = ImageTexture(labyrinth.assetManager.loadTexture("map_3.png"))
-            scale = 0.3f;
+            scale = 0.3f
             position = Vector2(740f, 300f)
             size = Vector2(labyrinth.width.toFloat(), labyrinth.height.toFloat())
         }

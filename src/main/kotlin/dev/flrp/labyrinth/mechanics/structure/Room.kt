@@ -7,38 +7,38 @@ class Room {
     var name = "Room"
     val connections: Int
         get() {
-            var count = 0;
-            if(leftRoom !== null) count++
-            if(rightRoom !== null) count++
-            if(upRoom !== null) count++
-            if(downRoom !== null) count++
-            return count;
+            var count = 0
+            if (leftRoom !== null) count++
+            if (rightRoom !== null) count++
+            if (upRoom !== null) count++
+            if (downRoom !== null) count++
+            return count
         }
     var leftRoom: Room? = null
         set(value) {
             field = value
-            if(value?.rightRoom !== this) {
+            if (value?.rightRoom !== this) {
                 value?.rightRoom = this
             }
         }
     var rightRoom: Room? = null
         set(value) {
             field = value
-            if(value?.leftRoom !== this) {
+            if (value?.leftRoom !== this) {
                 value?.leftRoom = this
             }
         }
     var upRoom: Room? = null
         set(value) {
             field = value
-            if(value?.downRoom !== this) {
+            if (value?.downRoom !== this) {
                 value?.downRoom = this
             }
         }
     var downRoom: Room? = null
         set(value) {
             field = value
-            if(value?.upRoom !== this) {
+            if (value?.upRoom !== this) {
                 value?.upRoom = this
             }
         }

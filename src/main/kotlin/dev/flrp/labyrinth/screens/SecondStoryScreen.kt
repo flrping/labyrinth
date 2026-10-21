@@ -144,7 +144,7 @@ class SecondStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) 
     }
 
     override fun onUpdate(delta: Double) {
-        if(Input.wasKeyPressed(Key.ENTER)) {
+        if (Input.wasKeyPressed(Key.ENTER)) {
             labyrinth.sawSecondCutscene = true
             labyrinth.changeScreen(
                 GameScreen(
@@ -198,7 +198,7 @@ class SecondStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) 
                 if (index < dialogueLines.size) {
                     speaker.text = dialogueLines[index].target
                     text.text = ""
-                    if(dialogueLines[index].noise !== null) {
+                    if (dialogueLines[index].noise !== null) {
                         sound.audio = dialogueLines[index].noise!!
                         sound.play()
                     }
@@ -210,7 +210,7 @@ class SecondStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) 
     }
 
     fun onDialogueChange() {
-        if(index >= dialogueLines.size) {
+        if (index >= dialogueLines.size) {
             labyrinth.sawSecondCutscene = true
             labyrinth.changeScreen(
                 GameScreen(

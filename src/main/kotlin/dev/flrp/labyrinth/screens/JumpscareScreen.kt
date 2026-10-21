@@ -4,12 +4,7 @@ import com.wyrmlings.rune.node.Node
 import com.wyrmlings.rune.node.Timer
 import dev.flrp.labyrinth.Labyrinth
 import dev.flrp.labyrinth.audio.AudioMaster
-import dev.flrp.labyrinth.mechanics.enemy.Enemy
-import dev.flrp.labyrinth.mechanics.enemy.EyesEnemy
-import dev.flrp.labyrinth.mechanics.enemy.HearingEnemy
-import dev.flrp.labyrinth.mechanics.enemy.SneakerEnemy
-import dev.flrp.labyrinth.mechanics.enemy.SoundEnemy
-import dev.flrp.labyrinth.mechanics.enemy.StomperEnemy
+import dev.flrp.labyrinth.mechanics.enemy.*
 
 class JumpscareScreen(
     val labyrinth: Labyrinth,
@@ -25,7 +20,7 @@ class JumpscareScreen(
     lateinit var timer: Timer
 
     override fun onReady() {
-        enemy = when(enemyType) {
+        enemy = when (enemyType) {
             EnemyType.EYES -> {
                 EyesEnemy(labyrinth)
             }
@@ -41,6 +36,7 @@ class JumpscareScreen(
             EnemyType.STOMPER -> {
                 StomperEnemy(labyrinth)
             }
+
             EnemyType.SNEAKER -> {
                 SneakerEnemy(labyrinth)
             }
@@ -54,7 +50,7 @@ class JumpscareScreen(
         addChild(timer)
 
         timer.start(5.0) {
-            val type = if(didTransform) {
+            val type = if (didTransform) {
                 GameOverType.TRANSFORMED
             } else {
                 GameOverType.DIED

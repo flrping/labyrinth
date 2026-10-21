@@ -34,7 +34,7 @@ class Hands(val labyrinth: Labyrinth, val sound: Sound) : TextureRect() {
             || Input.wasKeyPressed(Key.D)
         ) {
             isRightPlaced = !isRightPlaced
-            texture = if(isRightPlaced) {
+            texture = if (isRightPlaced) {
                 hand2Texture
             } else {
                 hand1Texture

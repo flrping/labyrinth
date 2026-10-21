@@ -1,7 +1,7 @@
 package dev.flrp.labyrinth
 
 object Assets {
-    
+
     val TEXTURES = arrayOf(
         "background.png",
         "ui.png",
@@ -56,7 +56,7 @@ object Assets {
     )
 
     fun loadAllTextures(labyrinth: Labyrinth) {
-        for(texture in TEXTURES) {
+        for (texture in TEXTURES) {
             val stream = javaClass.classLoader.getResourceAsStream("assets/images/${texture}")
             requireNotNull(stream) { "Missing resource for: $texture" }
             labyrinth.assetManager.registerTexture(texture, stream)
@@ -70,7 +70,7 @@ object Assets {
     )
 
     fun loadAllGIFs(labyrinth: Labyrinth) {
-        for(texture in TEXTURES_GIFS) {
+        for (texture in TEXTURES_GIFS) {
             val stream = javaClass.classLoader.getResourceAsStream("assets/images/${texture}")
             requireNotNull(stream) { "Missing resource for: $texture" }
             labyrinth.assetManager.registerTexturesFromGIF(texture, stream)
@@ -122,7 +122,7 @@ object Assets {
     )
 
     fun loadAllSounds(labyrinth: Labyrinth) {
-        for(sound in SOUNDS) {
+        for (sound in SOUNDS) {
             val stream = javaClass.classLoader.getResourceAsStream("assets/sounds/${sound}")
             requireNotNull(stream) { "Missing resource for: $sound" }
             labyrinth.audioManager.registerAudio(sound, stream)

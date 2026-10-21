@@ -162,7 +162,7 @@ class FinalStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) :
     }
 
     override fun onUpdate(delta: Double) {
-        if(Input.wasKeyPressed(Key.ENTER)) {
+        if (Input.wasKeyPressed(Key.ENTER)) {
             labyrinth.sawFinalCutscene = true
             labyrinth.changeScreen(
                 TitleScreen(labyrinth, audioMaster)
@@ -211,7 +211,7 @@ class FinalStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) :
                 if (index < dialogueLines.size) {
                     speaker.text = dialogueLines[index].target
                     text.text = ""
-                    if(dialogueLines[index].noise !== null) {
+                    if (dialogueLines[index].noise !== null) {
                         sound.audio = dialogueLines[index].noise!!
                         sound.play()
                     }
@@ -223,12 +223,12 @@ class FinalStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) :
     }
 
     fun onDialogueChange() {
-        when(index) {
+        when (index) {
             4 -> background.texture = story5
             23 -> background.texture = story7
         }
 
-        if(index >= dialogueLines.size) {
+        if (index >= dialogueLines.size) {
             labyrinth.sawFinalCutscene = true
             labyrinth.changeScreen(
                 TitleScreen(labyrinth, audioMaster)

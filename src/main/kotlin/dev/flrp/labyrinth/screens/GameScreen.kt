@@ -20,15 +20,9 @@ import dev.flrp.labyrinth.audio.AudioMaster
 import dev.flrp.labyrinth.audio.GameTheme
 import dev.flrp.labyrinth.event.ChangeRoomEvent
 import dev.flrp.labyrinth.mechanics.Hands
-import dev.flrp.labyrinth.mechanics.enemy.Enemy
-import dev.flrp.labyrinth.mechanics.enemy.EyesEnemy
-import dev.flrp.labyrinth.mechanics.enemy.HearingEnemy
-import dev.flrp.labyrinth.mechanics.enemy.SneakerEnemy
-import dev.flrp.labyrinth.mechanics.enemy.SoundEnemy
-import dev.flrp.labyrinth.mechanics.enemy.StomperEnemy
+import dev.flrp.labyrinth.mechanics.enemy.*
 import dev.flrp.labyrinth.mechanics.structure.Level
 import dev.flrp.labyrinth.mechanics.structure.Room
-import kotlin.collections.random
 import kotlin.math.floor
 import kotlin.random.Random
 
@@ -427,7 +421,7 @@ class GameScreen(
         }
         addChild(pressKey)
 
-        for(resolveSound in resolveSoundList) {
+        for (resolveSound in resolveSoundList) {
             resolveAudios += labyrinth.audioManager.loadAudio(resolveSound)
         }
 
@@ -481,34 +475,34 @@ class GameScreen(
     }
 
     override fun onUpdate(delta: Double) {
-        if(isBlowingWhistle) {
+        if (isBlowingWhistle) {
             whistleTimer += delta
 
-            if(whistleTimer >= 0.5f) {
+            if (whistleTimer >= 0.5f) {
                 whistleTimer = 0.0
                 isBlowingWhistle = false
             }
         }
 
-        if(Input.wasKeyPressed(Key.NUM_1) && !isEarPlugOn && !isMapOpen) { // Put on mask
+        if (Input.wasKeyPressed(Key.NUM_1) && !isEarPlugOn && !isMapOpen) { // Put on mask
             isMaskOn = !isMaskOn
             mask.visible = isMaskOn
-            if(isMaskOn) {
+            if (isMaskOn) {
                 gasMaskSound.play()
             } else {
                 gasMaskSound.stop()
             }
         }
 
-        if(Input.wasKeyPressed(Key.NUM_2) && !isMaskOn && !isEarPlugOn && !isBlowingWhistle && !isMapOpen) { // Blow whistle
+        if (Input.wasKeyPressed(Key.NUM_2) && !isMaskOn && !isEarPlugOn && !isBlowingWhistle && !isMapOpen) { // Blow whistle
             whistleCount++
             isBlowingWhistle = true
             whistle.play()
         }
 
-        if(Input.wasKeyPressed(Key.NUM_3) && !isMaskOn && !isMapOpen) { // Earplug
+        if (Input.wasKeyPressed(Key.NUM_3) && !isMaskOn && !isMapOpen) { // Earplug
             isEarPlugOn = !isEarPlugOn
-            if(isEarPlugOn) {
+            if (isEarPlugOn) {
                 earPlugSound.play()
                 earplugs.visible = true
                 musicVolume = 0.4f * labyrinth.musicVolume.toFloat()
@@ -520,17 +514,17 @@ class GameScreen(
             updateMusicVolumes()
         }
 
-        if(Input.wasKeyPressed(Key.M) && !isMaskOn && !isEarPlugOn && !isBlowingWhistle) {
+        if (Input.wasKeyPressed(Key.M) && !isMaskOn && !isEarPlugOn && !isBlowingWhistle) {
             isMapOpen = !isMapOpen
             map.visible = isMapOpen
         }
 
-        if(Input.wasKeyPressed(Key.F) && !isMaskOn && !isEarPlugOn && !isBlowingWhistle && !isMapOpen) {
-            if(clueRoom === currRoom) {
+        if (Input.wasKeyPressed(Key.F) && !isMaskOn && !isEarPlugOn && !isBlowingWhistle && !isMapOpen) {
+            if (clueRoom === currRoom) {
                 clue.visible = false
                 collected++
                 paperCrumpleSound.play()
-                if(collected >= cluesRequired) {
+                if (collected >= cluesRequired) {
                     clueRoom = null
                     cluesCollected.text = "All Clues Collected."
                     currentObjective.text = "Objective: Leave Through an Exit."
@@ -541,20 +535,38 @@ class GameScreen(
                 }
                 pressKey.visible = false
             }
-            if(currRoom in level.exitRooms) {
-                if(collected >= cluesRequired) {
+            if (currRoom in level.exitRooms) {
+                if (collected >= cluesRequired) {
                     audioMaster.stop()
                     ambience.stop()
                     movement.stop()
                     currentEnemy?.encounterSound?.stop()
-                    labyrinth.changeScreen(GameOverScreen(labyrinth, audioMaster, GameOverType.WIN, isStoryMode, levelNum, enemyValues))
+                    labyrinth.changeScreen(
+                        GameOverScreen(
+                            labyrinth,
+                            audioMaster,
+                            GameOverType.WIN,
+                            isStoryMode,
+                            levelNum,
+                            enemyValues
+                        )
+                    )
                     return
                 } else {
                     audioMaster.stop()
                     ambience.stop()
                     movement.stop()
                     currentEnemy?.encounterSound?.stop()
-                    labyrinth.changeScreen(GameOverScreen(labyrinth, audioMaster, GameOverType.RAN_AWAY, isStoryMode, levelNum, enemyValues))
+                    labyrinth.changeScreen(
+                        GameOverScreen(
+                            labyrinth,
+                            audioMaster,
+                            GameOverType.RAN_AWAY,
+                            isStoryMode,
+                            levelNum,
+                            enemyValues
+                        )
+                    )
                     return
                 }
             }
@@ -566,7 +578,7 @@ class GameScreen(
 
     fun onTimerDone() {
         for (enemy in level.enemies) {
-            if(enemy.roll()) {
+            if (enemy.roll()) {
                 val oldRoom = enemy.room
                 val availableRooms = level.rooms.let { enemy.pickRoom() }
                     ?.let { listOf(it) }
@@ -578,7 +590,7 @@ class GameScreen(
 
                 println("$enemy enemy moved to: ${selectedRoom.name}")
 
-                if(enemy.room === currRoom) {
+                if (enemy.room === currRoom) {
                     onEnemyArrive(enemy)
                 }
             }
@@ -603,16 +615,16 @@ class GameScreen(
         clue.visible = isClueRoom
         pressKey.visible = isClueRoom || isExitRoom
 
-        if(clueRoom === currRoom) {
+        if (clueRoom === currRoom) {
             pressKey.text = "Press F to Pick Up Clue."
         }
-        if(currRoom in level.exitRooms) {
+        if (currRoom in level.exitRooms) {
             pressKey.text = "Press F to Leave."
         }
 
-        for(enemy in level.enemies) {
-            if(enemy.room === currRoom) {
-                if(enemy.type != EnemyType.STOMPER && isHuntedByStomper) {
+        for (enemy in level.enemies) {
+            if (enemy.room === currRoom) {
+                if (enemy.type != EnemyType.STOMPER && isHuntedByStomper) {
                     moveEnemyRandom(enemy)
                     println("Stomper chase relocated $enemy to ${enemy.room?.name}")
                     break
@@ -623,8 +635,8 @@ class GameScreen(
             }
         }
 
-        if(currentEnemy?.type == EnemyType.STOMPER && isHuntedByStomper) {
-            if(moveCount >= movesNeeded) {
+        if (currentEnemy?.type == EnemyType.STOMPER && isHuntedByStomper) {
+            if (moveCount >= movesNeeded) {
                 isInDanger = false
                 currentEnemy!!.visible = false
                 (currentEnemy as StomperEnemy).encounterSound.stop()
@@ -658,25 +670,25 @@ class GameScreen(
 
         fearLevel++
 
-        if(fearLevel > 8) {
+        if (fearLevel > 8) {
             handleGameOver(enemy, true)
             return
         }
 
-        if(enemy is SneakerEnemy) {
+        if (enemy is SneakerEnemy) {
             sneakerTimeNeeded = (Math.random() * 5.0) + 2.0
         }
 
-        if(enemy is StomperEnemy) {
+        if (enemy is StomperEnemy) {
             isHuntedByStomper = true
             movesNeeded = (floor(Math.random() * 4) + 1).toInt()
         }
 
-        if(enemy is HearingEnemy) {
+        if (enemy is HearingEnemy) {
             enemy.encounterSound.pitch = 1f
         }
 
-        if(enemy is SoundEnemy) {
+        if (enemy is SoundEnemy) {
             whistleCount = 0
             whistleNeeded = enemy.recall()
         }
@@ -687,15 +699,15 @@ class GameScreen(
     }
 
     private fun resolveEnemyMechanic(delta: Double) {
-        if(currentEnemy === null) return;
+        if (currentEnemy === null) return
 
-        if(floor(Math.random()) > 0.8) {
+        if (floor(Math.random()) > 0.8) {
             currentEnemy!!.encounterSound.pitch = Random.nextFloat().coerceIn(0.8f, 1f)
         }
 
         // Taking too long when in danger should GO you.
-        if(resolveTimer > 7.0) {
-            if(currentEnemy is SoundEnemy && whistleNeeded == whistleCount) {
+        if (resolveTimer > 7.0) {
+            if (currentEnemy is SoundEnemy && whistleNeeded == whistleCount) {
                 isInDanger = false
                 currentEnemy!!.visible = false
                 (currentEnemy as SoundEnemy).encounterSound.stop()
@@ -708,17 +720,17 @@ class GameScreen(
                 resolveTimer = 0.0
             } else {
                 handleGameOver(currentEnemy!!, false)
-                return;
+                return
             }
         }
 
-        when(currentEnemy) {
+        when (currentEnemy) {
             is EyesEnemy -> {
-                if(isMaskOn) {
+                if (isMaskOn) {
                     eyesMaskTime += delta
                 }
 
-                if(eyesMaskTime > 3.5) {
+                if (eyesMaskTime > 3.5) {
                     isInDanger = false
                     currentEnemy!!.visible = false
                     (currentEnemy as EyesEnemy).encounterSound.stop()
@@ -730,12 +742,13 @@ class GameScreen(
                     resolveTimer = 0.0
                 }
             }
+
             is HearingEnemy -> {
-                if(isEarPlugOn) {
+                if (isEarPlugOn) {
                     earPlugTime += delta
                 }
 
-                if(earPlugTime > 3.5) {
+                if (earPlugTime > 3.5) {
                     isInDanger = false
                     currentEnemy!!.visible = false
                     (currentEnemy as HearingEnemy).encounterSound.stop()
@@ -749,7 +762,7 @@ class GameScreen(
             }
 
             is SneakerEnemy -> {
-                if(sneakerTimeWaited >= sneakerTimeNeeded) {
+                if (sneakerTimeWaited >= sneakerTimeNeeded) {
                     isInDanger = false
                     currentEnemy!!.visible = false
                     (currentEnemy as SneakerEnemy).resolutionSound.play()
@@ -773,13 +786,13 @@ class GameScreen(
         val inputDirection = when {
             Input.wasKeyPressed(Key.UP) || Input.wasKeyPressed(Key.W) -> 0
             Input.wasKeyPressed(Key.RIGHT) || Input.wasKeyPressed(Key.D) -> 1
-            Input.wasKeyPressed(Key.DOWN) ||  Input.wasKeyPressed(Key.S)-> 2
+            Input.wasKeyPressed(Key.DOWN) || Input.wasKeyPressed(Key.S) -> 2
             Input.wasKeyPressed(Key.LEFT) || Input.wasKeyPressed(Key.A) -> 3
             else -> return
         }
 
         // Moving when in danger should GO you.
-        if(isInDanger && currentEnemy != null && currentEnemy!!.type != EnemyType.STOMPER) {
+        if (isInDanger && currentEnemy != null && currentEnemy!!.type != EnemyType.STOMPER) {
             handleGameOver(currentEnemy!!, false)
         }
 
@@ -810,10 +823,30 @@ class GameScreen(
         ambience.stop()
         movement.stop()
         enemy.encounterSound.stop()
-        if(didTransform) {
-            labyrinth.changeScreen(JumpscareScreen(labyrinth, audioMaster, enemy.type, true, isStoryMode, levelNum, enemyValues))
+        if (didTransform) {
+            labyrinth.changeScreen(
+                JumpscareScreen(
+                    labyrinth,
+                    audioMaster,
+                    enemy.type,
+                    true,
+                    isStoryMode,
+                    levelNum,
+                    enemyValues
+                )
+            )
         } else {
-            labyrinth.changeScreen(JumpscareScreen(labyrinth, audioMaster, enemy.type, false, isStoryMode, levelNum, enemyValues))
+            labyrinth.changeScreen(
+                JumpscareScreen(
+                    labyrinth,
+                    audioMaster,
+                    enemy.type,
+                    false,
+                    isStoryMode,
+                    levelNum,
+                    enemyValues
+                )
+            )
         }
 
     }
@@ -825,16 +858,16 @@ class GameScreen(
             web1.visible = false
             web2.visible = false
 
-            if(it.pole == 1) {
+            if (it.pole == 1) {
                 pole1.visible = true
             }
-            if(it.pole == 2) {
+            if (it.pole == 2) {
                 pole2.visible = true
             }
-            if(it.web == 1) {
+            if (it.web == 1) {
                 web1.visible = true
             }
-            if(it.web == 2) {
+            if (it.web == 2) {
                 web2.visible = true
             }
         }
@@ -944,7 +977,7 @@ class GameScreen(
 
     private fun moveEnemyRandom(enemy: Enemy) {
         val oldRoom = enemy.room
-        val availableRooms = level.rooms.filter { it !in level.occupiedRooms || it == oldRoom || it != currRoom}
+        val availableRooms = level.rooms.filter { it !in level.occupiedRooms || it == oldRoom || it != currRoom }
         val selectedRoom = availableRooms.random()
         enemy.room = selectedRoom
         level.occupiedRooms.add(selectedRoom)

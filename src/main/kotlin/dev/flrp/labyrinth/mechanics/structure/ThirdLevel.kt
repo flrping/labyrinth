@@ -45,7 +45,7 @@ class ThirdLevel : Level() {
 
     override var initialDirection: String = "down"
     override var initialRoom: Room = room18
-    override var exitRooms = mutableListOf(initialRoom);
+    override var exitRooms = mutableListOf(initialRoom)
     override var exemptInitialClueRooms: MutableList<Room>
     override var exemptClueRooms = exitRooms
     override var mapTexture: String = "map_3.png"
@@ -97,7 +97,7 @@ class ThirdLevel : Level() {
         initialRoom = room18
     }
 
-    init{
+    init {
         setupRooms()
         exemptInitialClueRooms = mutableListOf()
         exemptInitialClueRooms.add(initialRoom)

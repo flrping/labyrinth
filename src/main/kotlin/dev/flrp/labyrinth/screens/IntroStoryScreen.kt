@@ -16,7 +16,6 @@ import dev.flrp.labyrinth.Defaults
 import dev.flrp.labyrinth.Labyrinth
 import dev.flrp.labyrinth.audio.AudioMaster
 import dev.flrp.labyrinth.audio.TitleTheme
-import dev.flrp.labyrinth.mechanics.enemy.EyesEnemy
 import dev.flrp.labyrinth.mechanics.structure.DialogueLine
 import dev.flrp.labyrinth.mechanics.structure.FirstLevel
 
@@ -41,13 +40,22 @@ class IntroStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) :
         DialogueLine("You", "You called?"),
         DialogueLine("Chief", "We have you on a new case. Here's the debrief."),
         DialogueLine("You", "Uhh... should I be solo? I am fairly new to this department."),
-        DialogueLine("Chief", "You have done good work these past few months. I think you can handle this and make a better impression."),
+        DialogueLine(
+            "Chief",
+            "You have done good work these past few months. I think you can handle this and make a better impression."
+        ),
         DialogueLine("Chief", "They have been discussing your promotion because of it. They will have you at my rank."),
         DialogueLine("Chief", "You have been wanting a promotion, no?"),
         DialogueLine("You", "Yes, but this seems a bit...."),
-        DialogueLine("Chief", "It isn't complicated, all you have to do is look around and report your findings. You'll find a way."),
+        DialogueLine(
+            "Chief",
+            "It isn't complicated, all you have to do is look around and report your findings. You'll find a way."
+        ),
         DialogueLine("You", "This location does not seem stable though. We need more units if I were to go."),
-        DialogueLine("Chief", "You should be on your way now. We need units on other things. We shouldn't put too much on a recon job."),
+        DialogueLine(
+            "Chief",
+            "You should be on your way now. We need units on other things. We shouldn't put too much on a recon job."
+        ),
         DialogueLine("You", "But-"),
         DialogueLine("Chief", "Just do your job."),
 
@@ -167,7 +175,7 @@ class IntroStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) :
     }
 
     override fun onUpdate(delta: Double) {
-        if(Input.wasKeyPressed(Key.ENTER)) {
+        if (Input.wasKeyPressed(Key.ENTER)) {
             labyrinth.sawIntro = true
             labyrinth.changeScreen(
                 GameScreen(
@@ -221,7 +229,7 @@ class IntroStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) :
                 if (index < dialogueLines.size) {
                     speaker.text = dialogueLines[index].target
                     text.text = ""
-                    if(dialogueLines[index].noise !== null) {
+                    if (dialogueLines[index].noise !== null) {
                         sound.audio = dialogueLines[index].noise!!
                         sound.play()
                     }
@@ -233,13 +241,13 @@ class IntroStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) :
     }
 
     fun onDialogueChange() {
-        when(index) {
+        when (index) {
             12 -> background.texture = story2
             19 -> background.texture = story3
             23 -> background.texture = story4
         }
 
-        if(index >= dialogueLines.size) {
+        if (index >= dialogueLines.size) {
             labyrinth.sawIntro = true
             labyrinth.changeScreen(
                 GameScreen(

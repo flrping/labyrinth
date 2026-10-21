@@ -5,7 +5,6 @@ import com.wyrmlings.rune.math.Vector2
 import com.wyrmlings.rune.node.Node
 import com.wyrmlings.rune.node.xy.ui.ColorRect
 import com.wyrmlings.rune.node.xy.ui.Label
-import com.wyrmlings.rune.node.xy.ui.TextureRect
 import com.wyrmlings.rune.property.Color
 import com.wyrmlings.rune.ui.style.container.FlatContainer
 import com.wyrmlings.rune.ui.style.text.FontSettings
@@ -15,11 +14,7 @@ import com.wyrmlings.rune.ui.style.text.TextPosition
 import com.wyrmlings.rune.ui.texture.ImageTexture
 import dev.flrp.labyrinth.Labyrinth
 import dev.flrp.labyrinth.audio.AudioMaster
-import dev.flrp.labyrinth.mechanics.enemy.EyesEnemy
-import dev.flrp.labyrinth.mechanics.enemy.HearingEnemy
-import dev.flrp.labyrinth.mechanics.enemy.SneakerEnemy
-import dev.flrp.labyrinth.mechanics.enemy.SoundEnemy
-import dev.flrp.labyrinth.mechanics.enemy.StomperEnemy
+import dev.flrp.labyrinth.mechanics.enemy.*
 import dev.flrp.labyrinth.ui.NineSliceButton
 
 class HowToPlayScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : Node() {
@@ -173,11 +168,12 @@ class HowToPlayScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : 
         hearingEnemy.visible = false
         stomperEnemy.visible = false
         sneakerEnemy.visible = false
-        when(page) {
+        when (page) {
             0 -> {
                 label.visible = true
                 enemyLabel.text = ""
             }
+
             1 -> {
                 eyesEnemy.visible = true
                 enemyLabel.text = """
@@ -188,6 +184,7 @@ class HowToPlayScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : 
                     ${eyesEnemy.resolution}
                 """.trimIndent()
             }
+
             2 -> {
                 soundEnemy.visible = true
                 enemyLabel.text = """
@@ -198,6 +195,7 @@ class HowToPlayScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : 
                     ${soundEnemy.resolution}
                 """.trimIndent()
             }
+
             3 -> {
                 hearingEnemy.visible = true
                 enemyLabel.text = """
@@ -208,6 +206,7 @@ class HowToPlayScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : 
                     ${hearingEnemy.resolution}
                 """.trimIndent()
             }
+
             4 -> {
                 enemyLabel.text = """
                     Description:
@@ -217,6 +216,7 @@ class HowToPlayScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) : 
                     ${stomperEnemy.resolution}
                 """.trimIndent()
             }
+
             5 -> {
                 sneakerEnemy.visible = true
                 enemyLabel.text = """

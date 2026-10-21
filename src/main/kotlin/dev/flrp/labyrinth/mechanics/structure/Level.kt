@@ -38,15 +38,15 @@ abstract class Level {
 
             if (breadth >= amount) continue
 
-            val neighbours = listOfNotNull(
+            val neighbors = listOfNotNull(
                 currRoom.upRoom,
                 currRoom.downRoom,
                 currRoom.leftRoom,
                 currRoom.rightRoom,
             )
 
-            for(neighbor in neighbours) {
-                if(visited.add(neighbor)) {
+            for (neighbor in neighbors) {
+                if (visited.add(neighbor)) {
                     queue.add(neighbor to breadth + 1)
                 }
             }
@@ -76,14 +76,14 @@ abstract class Level {
 
             if (distance >= max) continue
 
-            val neighbours = listOfNotNull(
+            val neighbors = listOfNotNull(
                 currRoom.upRoom,
                 currRoom.downRoom,
                 currRoom.leftRoom,
                 currRoom.rightRoom
             )
 
-            for (neighbor in neighbours) {
+            for (neighbor in neighbors) {
                 if (visited.add(neighbor)) {
                     queue.add(neighbor to distance + 1)
                 }

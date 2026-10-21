@@ -150,7 +150,7 @@ class ThirdStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) :
     }
 
     override fun onUpdate(delta: Double) {
-        if(Input.wasKeyPressed(Key.ENTER)) {
+        if (Input.wasKeyPressed(Key.ENTER)) {
             labyrinth.sawThirdCutscene = true
             labyrinth.changeScreen(
                 GameScreen(
@@ -206,7 +206,7 @@ class ThirdStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) :
                 if (index < dialogueLines.size) {
                     speaker.text = dialogueLines[index].target
                     text.text = ""
-                    if(dialogueLines[index].noise !== null) {
+                    if (dialogueLines[index].noise !== null) {
                         sound.audio = dialogueLines[index].noise!!
                         sound.play()
                     }
@@ -218,7 +218,7 @@ class ThirdStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) :
     }
 
     fun onDialogueChange() {
-        if(index >= dialogueLines.size) {
+        if (index >= dialogueLines.size) {
             labyrinth.sawThirdCutscene = true
             labyrinth.changeScreen(
                 GameScreen(

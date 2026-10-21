@@ -36,7 +36,7 @@ class AudioMaster : Node() {
         sounds.values.forEach(Sound::play)
     }
 
-    fun volume(volume : Float) {
+    fun volume(volume: Float) {
         sounds.values.forEach {
             it.volume = volume
         }
@@ -55,7 +55,7 @@ class AudioMaster : Node() {
         sounds[track]?.volume = volume
     }
 
-    fun volume(track: String, volume : Float) {
+    fun volume(track: String, volume: Float) {
         sounds[track]?.volume = volume
     }
 
