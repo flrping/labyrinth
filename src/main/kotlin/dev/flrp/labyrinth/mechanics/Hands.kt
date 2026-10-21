@@ -1,7 +1,5 @@
 package dev.flrp.labyrinth.mechanics
 
-import com.wyrmlings.rune.input.Input
-import com.wyrmlings.rune.input.Key
 import com.wyrmlings.rune.math.Vector2
 import com.wyrmlings.rune.node.Sound
 import com.wyrmlings.rune.node.xy.ui.TextureRect
@@ -22,26 +20,15 @@ class Hands(val labyrinth: Labyrinth, val sound: Sound) : TextureRect() {
         size = Vector2(labyrinth.width.toFloat(), labyrinth.height.toFloat())
     }
 
-    override fun onUpdate(delta: Double) {
-        if (
-            Input.wasKeyPressed(Key.UP)
-            || Input.wasKeyPressed(Key.DOWN)
-            || Input.wasKeyPressed(Key.LEFT)
-            || Input.wasKeyPressed(Key.RIGHT)
-            || Input.wasKeyPressed(Key.W)
-            || Input.wasKeyPressed(Key.A)
-            || Input.wasKeyPressed(Key.S)
-            || Input.wasKeyPressed(Key.D)
-        ) {
-            isRightPlaced = !isRightPlaced
-            texture = if (isRightPlaced) {
-                hand2Texture
-            } else {
-                hand1Texture
-            }
-
-            sound.play()
+    fun changeHands() {
+        isRightPlaced = !isRightPlaced
+        texture = if (isRightPlaced) {
+            hand2Texture
+        } else {
+            hand1Texture
         }
+
+        sound.play()
     }
 
 }

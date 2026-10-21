@@ -50,7 +50,7 @@ class GameScreen(
     lateinit var pole2: TextureRect
     lateinit var web1: TextureRect
     lateinit var web2: TextureRect
-    lateinit var hands: TextureRect
+    lateinit var hands: Hands
     lateinit var mask: TextureRect
     lateinit var map: TextureRect
     lateinit var clue: TextureRect
@@ -608,6 +608,8 @@ class GameScreen(
         currRoom = room
 
         roomName.text = room.name
+
+        hands.changeHands()
 
         val isClueRoom = currRoom == clueRoom
         val isExitRoom = currRoom in level.exitRooms
