@@ -1,7 +1,5 @@
 package dev.flrp.labyrinth.screens
 
-import com.wyrmlings.rune.input.Input
-import com.wyrmlings.rune.input.Key
 import com.wyrmlings.rune.math.Vector2
 import com.wyrmlings.rune.node.Node
 import com.wyrmlings.rune.node.Sound
@@ -15,6 +13,7 @@ import com.wyrmlings.rune.ui.style.text.TextAlign
 import com.wyrmlings.rune.ui.style.text.TextDecoration
 import com.wyrmlings.rune.ui.style.text.TextPosition
 import com.wyrmlings.rune.ui.texture.ImageTexture
+import dev.flrp.labyrinth.ActionType
 import dev.flrp.labyrinth.Labyrinth
 import dev.flrp.labyrinth.audio.AudioMaster
 import dev.flrp.labyrinth.audio.GameTheme
@@ -484,7 +483,7 @@ class GameScreen(
             }
         }
 
-        if (Input.wasKeyPressed(Key.NUM_1) && !isEarPlugOn && !isMapOpen) { // Put on mask
+        if (labyrinth.keybindManager.wasActionPressed(ActionType.USE_MASK) && !isEarPlugOn && !isMapOpen) { // Put on mask
             isMaskOn = !isMaskOn
             mask.visible = isMaskOn
             if (isMaskOn) {
@@ -494,13 +493,13 @@ class GameScreen(
             }
         }
 
-        if (Input.wasKeyPressed(Key.NUM_2) && !isMaskOn && !isEarPlugOn && !isBlowingWhistle && !isMapOpen) { // Blow whistle
+        if (labyrinth.keybindManager.wasActionPressed(ActionType.USE_WHISTLE) && !isMaskOn && !isEarPlugOn && !isBlowingWhistle && !isMapOpen) { // Blow whistle
             whistleCount++
             isBlowingWhistle = true
             whistle.play()
         }
 
-        if (Input.wasKeyPressed(Key.NUM_3) && !isMaskOn && !isMapOpen) { // Earplug
+        if (labyrinth.keybindManager.wasActionPressed(ActionType.USE_EARPLUGS) && !isMaskOn && !isMapOpen) { // Earplug
             isEarPlugOn = !isEarPlugOn
             if (isEarPlugOn) {
                 earPlugSound.play()
@@ -514,12 +513,12 @@ class GameScreen(
             updateMusicVolumes()
         }
 
-        if (Input.wasKeyPressed(Key.M) && !isMaskOn && !isEarPlugOn && !isBlowingWhistle) {
+        if (labyrinth.keybindManager.wasActionPressed(ActionType.USE_MAP) && !isMaskOn && !isEarPlugOn && !isBlowingWhistle) {
             isMapOpen = !isMapOpen
             map.visible = isMapOpen
         }
 
-        if (Input.wasKeyPressed(Key.F) && !isMaskOn && !isEarPlugOn && !isBlowingWhistle && !isMapOpen) {
+        if (labyrinth.keybindManager.wasActionPressed(ActionType.INTERACT) && !isMaskOn && !isEarPlugOn && !isBlowingWhistle && !isMapOpen) {
             if (clueRoom === currRoom) {
                 clue.visible = false
                 collected++
@@ -786,10 +785,10 @@ class GameScreen(
         val currentRoom = currRoom ?: return
 
         val inputDirection = when {
-            Input.wasKeyPressed(Key.UP) || Input.wasKeyPressed(Key.W) -> 0
-            Input.wasKeyPressed(Key.RIGHT) || Input.wasKeyPressed(Key.D) -> 1
-            Input.wasKeyPressed(Key.DOWN) || Input.wasKeyPressed(Key.S) -> 2
-            Input.wasKeyPressed(Key.LEFT) || Input.wasKeyPressed(Key.A) -> 3
+            labyrinth.keybindManager.wasActionPressed(ActionType.MOVE_UP) -> 0
+            labyrinth.keybindManager.wasActionPressed(ActionType.MOVE_RIGHT) -> 1
+            labyrinth.keybindManager.wasActionPressed(ActionType.MOVE_DOWN) -> 2
+            labyrinth.keybindManager.wasActionPressed(ActionType.MOVE_LEFT) -> 3
             else -> return
         }
 

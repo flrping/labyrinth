@@ -2,13 +2,17 @@ package dev.flrp.labyrinth
 
 import com.wyrmlings.rune.Game
 import com.wyrmlings.rune.event.EventBus
+import com.wyrmlings.rune.input.Key
+import com.wyrmlings.rune.input.Keybind
+import com.wyrmlings.rune.input.KeybindManager
 import com.wyrmlings.rune.render.TextureFilter
 import dev.flrp.labyrinth.audio.AudioMaster
 import dev.flrp.labyrinth.screens.TitleScreen
 
 class Labyrinth : Game() {
 
-    val eventBus = EventBus()
+    val eventBus: EventBus = EventBus()
+    val keybindManager: KeybindManager<ActionType> = KeybindManager()
 
     var gameGamma: Double = 1.0
         set(value) {
@@ -62,6 +66,23 @@ class Labyrinth : Game() {
 
         val audioMaster = AudioMaster().apply { name = "AudioMaster" }
         globals.addChild(audioMaster)
+
+        val keybinds = mapOf(
+            ActionType.MOVE_UP to listOf(Key.UP, Key.W),
+            ActionType.MOVE_DOWN to listOf(Key.DOWN, Key.S),
+            ActionType.MOVE_LEFT to listOf(Key.LEFT, Key.A),
+            ActionType.MOVE_RIGHT to listOf(Key.RIGHT, Key.D),
+            ActionType.USE_MASK to listOf(Key.NUM_1),
+            ActionType.USE_WHISTLE to listOf(Key.NUM_2),
+            ActionType.USE_EARPLUGS to listOf(Key.NUM_3),
+            ActionType.USE_MAP to listOf(Key.M),
+            ActionType.INTERACT to listOf(Key.F),
+            ActionType.SKIP to listOf(Key.ENTER),
+        )
+
+        for(keybind in keybinds) {
+            keybindManager.addAction(keybind.key, Keybind(keybind.key.toString(), keybind.value))
+        }
 
         setInitialScreen(TitleScreen(this, audioMaster))
     }

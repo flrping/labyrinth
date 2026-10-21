@@ -1,7 +1,5 @@
 package dev.flrp.labyrinth.screens
 
-import com.wyrmlings.rune.input.Input
-import com.wyrmlings.rune.input.Key
 import com.wyrmlings.rune.math.Vector2
 import com.wyrmlings.rune.node.Node
 import com.wyrmlings.rune.node.Sound
@@ -12,6 +10,7 @@ import com.wyrmlings.rune.property.Color
 import com.wyrmlings.rune.ui.style.text.FontSettings
 import com.wyrmlings.rune.ui.style.text.TextDecoration
 import com.wyrmlings.rune.ui.texture.ImageTexture
+import dev.flrp.labyrinth.ActionType
 import dev.flrp.labyrinth.Labyrinth
 import dev.flrp.labyrinth.audio.AudioMaster
 import dev.flrp.labyrinth.audio.TitleTheme
@@ -162,7 +161,7 @@ class FinalStoryScreen(val labyrinth: Labyrinth, val audioMaster: AudioMaster) :
     }
 
     override fun onUpdate(delta: Double) {
-        if (Input.wasKeyPressed(Key.ENTER)) {
+        if (labyrinth.keybindManager.wasActionPressed(ActionType.SKIP)) {
             labyrinth.sawFinalCutscene = true
             labyrinth.changeScreen(
                 TitleScreen(labyrinth, audioMaster)
